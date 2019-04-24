@@ -14,7 +14,7 @@ class ViewController: UIViewController {
         let bt  = UIButton()
         bt.setImage(#imageLiteral(resourceName: "plus_photo").withRenderingMode(.alwaysOriginal), for: .normal)
         bt.addTarget(self, action: #selector(handleChangePhoto), for: .touchUpInside)
-        bt.translatesAutoresizingMaskIntoConstraints = false
+       
         return bt
     }()
     let emailTextField:UITextField = {
@@ -44,7 +44,7 @@ class ViewController: UIViewController {
     lazy var signUpButton:UIButton = {
         let bt  = UIButton()
         bt.setTitle("Sign up", for: .normal)
-        bt.addTarget(self, action: #selector(handleSugnUp), for: .touchUpInside)
+        bt.addTarget(self, action: #selector(handleSignUp), for: .touchUpInside)
        bt.backgroundColor = UIColor(r: 149, g: 204, b: 244)
         bt.layer.cornerRadius = 5
         bt.setTitleColor(.white, for: .normal)
@@ -68,22 +68,40 @@ class ViewController: UIViewController {
         view.addSubview(stacks)
        view.addSubview(signUpButton)
         
-        plusPhotoButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        plusPhotoButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 60).isActive = true
-        plusPhotoButton.heightAnchor.constraint(equalToConstant: 140).isActive = true
-        plusPhotoButton.widthAnchor.constraint(equalToConstant: 140).isActive = true
         
+        plusPhotoButton.anchor(top: view.topAnchor, leading: nil, bottom: nil, trailing: nil,padding: .init(top: 60, left: 0, bottom: 0, right: 0),size: .init(width: 140, height: 140))
+        plusPhotoButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         stacks.anchor(top: plusPhotoButton.bottomAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor,padding: .init(top: 50, left: 40, bottom: 0, right: 40),size: .init(width: 0, height: 200))
         signUpButton.anchor(top: stacks.bottomAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor,padding: .init(top: 20, left: 40, bottom: 0, right: 40),size: .init(width: 0, height: 50))
         
     }
     
   @objc  func handleChangePhoto()  {
-        print(123)
+    let imagePickers = UIImagePickerController()
+    imagePickers.delegate = self
+    imagePickers.allowsEditing = true
+    
+    present(imagePickers, animated: true, completion: nil)
     }
     
-    @objc  func handleSugnUp()  {
-        print(000)
+    @objc  func handleSignUp()  {
+        
     }
 }
 
+extension ViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let editied = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
+            plusPhotoButton.setImage(editied.withRenderingMode(.alwaysOriginal), for: .normal)
+        }else if let original = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            plusPhotoButton.setImage(original.withRenderingMode(.alwaysOriginal), for: .normal)
+        }
+        plusPhotoButton.layer.cornerRadius = plusPhotoButton.frame.width/2
+        plusPhotoButton.clipsToBounds = true
+        plusPhotoButton.layer.borderWidth = 3
+        plusPhotoButton.layer.borderColor = UIColor.black.cgColor
+        
+        dismiss(animated: true, completion: nil)
+    }
+}
