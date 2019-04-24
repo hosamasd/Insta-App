@@ -10,6 +10,12 @@
 		4E77ADD4227041E500B09397 /* MainTabBarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E77ADD3227041E500B09397 /* MainTabBarVC.swift */; };
 		4E77ADD62270422D00B09397 /* UserProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E77ADD52270422D00B09397 /* UserProfileVC.swift */; };
 		4E77ADD82270459E00B09397 /* UserProfileHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E77ADD72270459E00B09397 /* UserProfileHeaderCell.swift */; };
+		4E957E1F2270865E0042B39E /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E957E1E2270865E0042B39E /* HomeVC.swift */; };
+		4E957E21227086BA0042B39E /* SearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E957E20227086BA0042B39E /* SearchVC.swift */; };
+		4E957E23227086DD0042B39E /* PlusVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E957E22227086DD0042B39E /* PlusVC.swift */; };
+		4E957E25227086F50042B39E /* LikeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E957E24227086F50042B39E /* LikeVC.swift */; };
+		4E957E2722708C920042B39E /* PhotoSelectorVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E957E2622708C920042B39E /* PhotoSelectorVC.swift */; };
+		4E957E2922708EE30042B39E /* PhotoSelectorHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E957E2822708EE30042B39E /* PhotoSelectorHeaderCell.swift */; };
 		4EA0D36722705ADB00CAF3FD /* UserProfileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA0D36622705ADB00CAF3FD /* UserProfileCell.swift */; };
 		4EA0D36922705F5000CAF3FD /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA0D36822705F5000CAF3FD /* LoginVC.swift */; };
 		4EF6B72222702FA700504AE6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EF6B72122702FA700504AE6 /* AppDelegate.swift */; };
@@ -24,6 +30,12 @@
 		4E77ADD3227041E500B09397 /* MainTabBarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarVC.swift; sourceTree = "<group>"; };
 		4E77ADD52270422D00B09397 /* UserProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileVC.swift; sourceTree = "<group>"; };
 		4E77ADD72270459E00B09397 /* UserProfileHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileHeaderCell.swift; sourceTree = "<group>"; };
+		4E957E1E2270865E0042B39E /* HomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVC.swift; sourceTree = "<group>"; };
+		4E957E20227086BA0042B39E /* SearchVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchVC.swift; sourceTree = "<group>"; };
+		4E957E22227086DD0042B39E /* PlusVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlusVC.swift; sourceTree = "<group>"; };
+		4E957E24227086F50042B39E /* LikeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeVC.swift; sourceTree = "<group>"; };
+		4E957E2622708C920042B39E /* PhotoSelectorVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSelectorVC.swift; sourceTree = "<group>"; };
+		4E957E2822708EE30042B39E /* PhotoSelectorHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSelectorHeaderCell.swift; sourceTree = "<group>"; };
 		4EA0D36622705ADB00CAF3FD /* UserProfileCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileCell.swift; sourceTree = "<group>"; };
 		4EA0D36822705F5000CAF3FD /* LoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
 		4EF6B71E22702FA700504AE6 /* Insta App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Insta App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -47,17 +59,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		4E9F9ADD227072950033A47A /* New Group */ = {
+		4E9F9ADD227072950033A47A /* login&registerVC */ = {
 			isa = PBXGroup;
 			children = (
+				4EF6B72322702FA700504AE6 /* RegisterVC.swift */,
+				4EA0D36822705F5000CAF3FD /* LoginVC.swift */,
 			);
-			path = "New Group";
+			path = "login&registerVC";
 			sourceTree = "<group>";
 		};
 		4EF6B71522702FA700504AE6 = {
 			isa = PBXGroup;
 			children = (
-				4E9F9ADD227072950033A47A /* New Group */,
+				4E9F9ADD227072950033A47A /* login&registerVC */,
 				4EF6B72022702FA700504AE6 /* Insta App */,
 				4EF6B71F22702FA700504AE6 /* Products */,
 			);
@@ -91,9 +105,12 @@
 			isa = PBXGroup;
 			children = (
 				4E77ADD3227041E500B09397 /* MainTabBarVC.swift */,
-				4EF6B72322702FA700504AE6 /* RegisterVC.swift */,
-				4EA0D36822705F5000CAF3FD /* LoginVC.swift */,
+				4E957E1E2270865E0042B39E /* HomeVC.swift */,
+				4E957E20227086BA0042B39E /* SearchVC.swift */,
+				4E957E22227086DD0042B39E /* PlusVC.swift */,
+				4E957E24227086F50042B39E /* LikeVC.swift */,
 				4E77ADD52270422D00B09397 /* UserProfileVC.swift */,
+				4E957E2622708C920042B39E /* PhotoSelectorVC.swift */,
 			);
 			path = controller;
 			sourceTree = "<group>";
@@ -110,6 +127,7 @@
 			children = (
 				4EA0D36622705ADB00CAF3FD /* UserProfileCell.swift */,
 				4E77ADD72270459E00B09397 /* UserProfileHeaderCell.swift */,
+				4E957E2822708EE30042B39E /* PhotoSelectorHeaderCell.swift */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -188,10 +206,16 @@
 				4EF6B72422702FA700504AE6 /* RegisterVC.swift in Sources */,
 				4E77ADD82270459E00B09397 /* UserProfileHeaderCell.swift in Sources */,
 				4EA0D36922705F5000CAF3FD /* LoginVC.swift in Sources */,
+				4E957E1F2270865E0042B39E /* HomeVC.swift in Sources */,
 				4EA0D36722705ADB00CAF3FD /* UserProfileCell.swift in Sources */,
+				4E957E25227086F50042B39E /* LikeVC.swift in Sources */,
+				4E957E2722708C920042B39E /* PhotoSelectorVC.swift in Sources */,
 				4EF6B72222702FA700504AE6 /* AppDelegate.swift in Sources */,
+				4E957E2922708EE30042B39E /* PhotoSelectorHeaderCell.swift in Sources */,
+				4E957E21227086BA0042B39E /* SearchVC.swift in Sources */,
 				4EF6B73422702FB600504AE6 /* ExtensionUivew.swift in Sources */,
 				4E77ADD62270422D00B09397 /* UserProfileVC.swift in Sources */,
+				4E957E23227086DD0042B39E /* PlusVC.swift in Sources */,
 				4E77ADD4227041E500B09397 /* MainTabBarVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

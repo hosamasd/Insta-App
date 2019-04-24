@@ -9,33 +9,40 @@
 import UIKit
 
 class MainTabBarVC: UITabBarController {
+    
     var isLogin = true
     
-   
     
     override func viewDidLoad() {
         super.viewDidLoad()
         //check if login or not
+        self.delegate = self
         if !isLogin {
             checkLoginState()
         }
         
         setupViewControllers()
-        
-        
-    }
+   }
     
     //MARK: -USER METHODS
     
     fileprivate func setupViewControllers() {
-        let layout = UICollectionViewFlowLayout()
-        let userProfile = UserProfileVC(collectionViewLayout: layout)
-        let navController = UINavigationController(rootViewController: userProfile)
-        navController.tabBarItem.image = #imageLiteral(resourceName: "profile_unselected")
-        navController.tabBarItem.selectedImage = #imageLiteral(resourceName: "profile_selected")
+        let home = templateNavControllerVC(unselectedImage: #imageLiteral(resourceName: "home_unselected"), selectedImage: #imageLiteral(resourceName: "home_selected"), rootViewController: HomeVC())
+         let search = templateNavControllerVC(unselectedImage: #imageLiteral(resourceName: "search_unselected"), selectedImage: #imageLiteral(resourceName: "search_selected"), rootViewController: SearchVC())
+         let like = templateNavControllerVC(unselectedImage: #imageLiteral(resourceName: "like_unselected"), selectedImage: #imageLiteral(resourceName: "like_selected"), rootViewController: LikeVC())
+         let plus = templateNavControllerVC(unselectedImage: #imageLiteral(resourceName: "plus_unselected"), selectedImage: #imageLiteral(resourceName: "plus_unselected"), rootViewController: PlusVC())
+        
+        let userProfile = UserProfileVC(collectionViewLayout: UICollectionViewFlowLayout())
+        let userProdVC = templateNavControllerVC(unselectedImage: #imageLiteral(resourceName: "profile_unselected"), selectedImage: #imageLiteral(resourceName: "profile_selected"), rootViewController: userProfile)
         
         tabBar.tintColor = .black
-        viewControllers = [navController,UIViewController()]
+        
+        viewControllers = [
+            home,
+            search,
+            plus,
+            like,
+            userProdVC]
         
         guard let items = tabBar.items else { return }
         
@@ -44,21 +51,34 @@ class MainTabBarVC: UITabBarController {
         }
     }
     
-    func checkLoginState()  {
+   fileprivate func checkLoginState()  {
         DispatchQueue.main.async {
             let login = LoginVC()
             let nav = UINavigationController(rootViewController: login)
             self.present(nav, animated: true, completion: nil)
         }
-        
-        
     }
     
-    fileprivate func templateNavController(unselectedImage: UIImage, selectedImage: UIImage, rootViewController: UIViewController = UIViewController()) -> UINavigationController {
+    fileprivate func templateNavControllerVC(unselectedImage: UIImage, selectedImage: UIImage, rootViewController: UIViewController = UIViewController()) -> UINavigationController {
         let viewController = rootViewController
         let navController = UINavigationController(rootViewController: viewController)
         navController.tabBarItem.image = unselectedImage
         navController.tabBarItem.selectedImage = selectedImage
         return navController
+    }
+}
+extension MainTabBarVC: UITabBarControllerDelegate {
+    
+    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+            let index = tabBarController.viewControllers?.index(of: viewController)
+        if index == 2 {
+            let photo = PhotoSelectorVC(collectionViewLayout: UICollectionViewFlowLayout())
+            let nav = UINavigationController(rootViewController: photo)
+            
+           present(nav, animated: true, completion: nil)
+            
+          return false
+        }
+        return true
     }
 }
