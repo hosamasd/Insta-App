@@ -12,6 +12,7 @@
 		4EF6B72722702FA700504AE6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4EF6B72522702FA700504AE6 /* Main.storyboard */; };
 		4EF6B72922702FA900504AE6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4EF6B72822702FA900504AE6 /* Assets.xcassets */; };
 		4EF6B72C22702FA900504AE6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4EF6B72A22702FA900504AE6 /* LaunchScreen.storyboard */; };
+		4EF6B73422702FB600504AE6 /* ExtensionUivew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EF6B73322702FB600504AE6 /* ExtensionUivew.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +23,7 @@
 		4EF6B72822702FA900504AE6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4EF6B72B22702FA900504AE6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4EF6B72D22702FA900504AE6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4EF6B73322702FB600504AE6 /* ExtensionUivew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionUivew.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,13 +57,38 @@
 			isa = PBXGroup;
 			children = (
 				4EF6B72122702FA700504AE6 /* AppDelegate.swift */,
-				4EF6B72322702FA700504AE6 /* ViewController.swift */,
+				4EF6B73622702FC300504AE6 /* model */,
+				4EF6B73722702FC900504AE6 /* view */,
+				4EF6B73522702FBA00504AE6 /* controller */,
 				4EF6B72522702FA700504AE6 /* Main.storyboard */,
 				4EF6B72822702FA900504AE6 /* Assets.xcassets */,
 				4EF6B72A22702FA900504AE6 /* LaunchScreen.storyboard */,
 				4EF6B72D22702FA900504AE6 /* Info.plist */,
+				4EF6B73322702FB600504AE6 /* ExtensionUivew.swift */,
 			);
 			path = "Insta App";
+			sourceTree = "<group>";
+		};
+		4EF6B73522702FBA00504AE6 /* controller */ = {
+			isa = PBXGroup;
+			children = (
+				4EF6B72322702FA700504AE6 /* ViewController.swift */,
+			);
+			path = controller;
+			sourceTree = "<group>";
+		};
+		4EF6B73622702FC300504AE6 /* model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = model;
+			sourceTree = "<group>";
+		};
+		4EF6B73722702FC900504AE6 /* view */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = view;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -137,6 +164,7 @@
 			files = (
 				4EF6B72422702FA700504AE6 /* ViewController.swift in Sources */,
 				4EF6B72222702FA700504AE6 /* AppDelegate.swift in Sources */,
+				4EF6B73422702FB600504AE6 /* ExtensionUivew.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
