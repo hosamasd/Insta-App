@@ -10,8 +10,10 @@
 		4E77ADD4227041E500B09397 /* MainTabBarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E77ADD3227041E500B09397 /* MainTabBarVC.swift */; };
 		4E77ADD62270422D00B09397 /* UserProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E77ADD52270422D00B09397 /* UserProfileVC.swift */; };
 		4E77ADD82270459E00B09397 /* UserProfileHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E77ADD72270459E00B09397 /* UserProfileHeaderCell.swift */; };
+		4EA0D36722705ADB00CAF3FD /* UserProfileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA0D36622705ADB00CAF3FD /* UserProfileCell.swift */; };
+		4EA0D36922705F5000CAF3FD /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA0D36822705F5000CAF3FD /* LoginVC.swift */; };
 		4EF6B72222702FA700504AE6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EF6B72122702FA700504AE6 /* AppDelegate.swift */; };
-		4EF6B72422702FA700504AE6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EF6B72322702FA700504AE6 /* ViewController.swift */; };
+		4EF6B72422702FA700504AE6 /* RegisterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EF6B72322702FA700504AE6 /* RegisterVC.swift */; };
 		4EF6B72722702FA700504AE6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4EF6B72522702FA700504AE6 /* Main.storyboard */; };
 		4EF6B72922702FA900504AE6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4EF6B72822702FA900504AE6 /* Assets.xcassets */; };
 		4EF6B72C22702FA900504AE6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4EF6B72A22702FA900504AE6 /* LaunchScreen.storyboard */; };
@@ -22,9 +24,11 @@
 		4E77ADD3227041E500B09397 /* MainTabBarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarVC.swift; sourceTree = "<group>"; };
 		4E77ADD52270422D00B09397 /* UserProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileVC.swift; sourceTree = "<group>"; };
 		4E77ADD72270459E00B09397 /* UserProfileHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileHeaderCell.swift; sourceTree = "<group>"; };
+		4EA0D36622705ADB00CAF3FD /* UserProfileCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileCell.swift; sourceTree = "<group>"; };
+		4EA0D36822705F5000CAF3FD /* LoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
 		4EF6B71E22702FA700504AE6 /* Insta App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Insta App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4EF6B72122702FA700504AE6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		4EF6B72322702FA700504AE6 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		4EF6B72322702FA700504AE6 /* RegisterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterVC.swift; sourceTree = "<group>"; };
 		4EF6B72622702FA700504AE6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		4EF6B72822702FA900504AE6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4EF6B72B22702FA900504AE6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -79,7 +83,8 @@
 			isa = PBXGroup;
 			children = (
 				4E77ADD3227041E500B09397 /* MainTabBarVC.swift */,
-				4EF6B72322702FA700504AE6 /* ViewController.swift */,
+				4EF6B72322702FA700504AE6 /* RegisterVC.swift */,
+				4EA0D36822705F5000CAF3FD /* LoginVC.swift */,
 				4E77ADD52270422D00B09397 /* UserProfileVC.swift */,
 			);
 			path = controller;
@@ -95,6 +100,7 @@
 		4EF6B73722702FC900504AE6 /* view */ = {
 			isa = PBXGroup;
 			children = (
+				4EA0D36622705ADB00CAF3FD /* UserProfileCell.swift */,
 				4E77ADD72270459E00B09397 /* UserProfileHeaderCell.swift */,
 			);
 			path = view;
@@ -171,8 +177,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4EF6B72422702FA700504AE6 /* ViewController.swift in Sources */,
+				4EF6B72422702FA700504AE6 /* RegisterVC.swift in Sources */,
 				4E77ADD82270459E00B09397 /* UserProfileHeaderCell.swift in Sources */,
+				4EA0D36922705F5000CAF3FD /* LoginVC.swift in Sources */,
+				4EA0D36722705ADB00CAF3FD /* UserProfileCell.swift in Sources */,
 				4EF6B72222702FA700504AE6 /* AppDelegate.swift in Sources */,
 				4EF6B73422702FB600504AE6 /* ExtensionUivew.swift in Sources */,
 				4E77ADD62270422D00B09397 /* UserProfileVC.swift in Sources */,

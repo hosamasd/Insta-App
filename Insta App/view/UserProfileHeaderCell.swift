@@ -20,12 +20,13 @@ class UserProfileHeaderCell: UICollectionReusableView {
        let la = UILabel()
         la.text = "user name"
         la.font = UIFont.systemFont(ofSize: 16)
-        la.backgroundColor = .red
-        return la
+         return la
     }()
     let postLabel:UILabel = {
         let la = UILabel()
-        la.text = "11\nPost"
+        let attributeText = NSMutableAttributedString(string: "11\n", attributes:  [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 14)])
+        attributeText.append(NSAttributedString(string: "post", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14),.foregroundColor: UIColor.lightGray]))
+        la.attributedText = attributeText
         la.numberOfLines = 0
         la.textAlignment = .center
         la.font = UIFont.systemFont(ofSize: 16)
@@ -33,7 +34,9 @@ class UserProfileHeaderCell: UICollectionReusableView {
     }()
     let followersLabel:UILabel = {
         let la = UILabel()
-        la.text = "11\nFollowers"
+        let attributeText = NSMutableAttributedString(string: "0\n", attributes:  [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 14)])
+        attributeText.append(NSAttributedString(string: "followers", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14),.foregroundColor: UIColor.lightGray]))
+        la.attributedText = attributeText
          la.numberOfLines = 0
         la.textAlignment = .center
         la.font = UIFont.systemFont(ofSize: 16)
@@ -42,11 +45,25 @@ class UserProfileHeaderCell: UICollectionReusableView {
     }()
     let followeringLabel:UILabel = {
         let la = UILabel()
-        la.text = "11\nFollowering"
+        let attributeText = NSMutableAttributedString(string: "0\n", attributes:  [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 14)])
+        attributeText.append(NSAttributedString(string: "followering", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14),.foregroundColor: UIColor.lightGray]))
+        la.attributedText = attributeText
          la.numberOfLines = 0
         la.textAlignment = .center
         la.font = UIFont.systemFont(ofSize: 16)
         return la
+    }()
+    let topView:UIView = {
+       let tv = UIView()
+        tv.backgroundColor = .lightGray
+        
+        return tv
+    }()
+    let bottomView:UIView = {
+        let tv = UIView()
+        tv.backgroundColor = .lightGray
+        
+        return tv
     }()
     lazy var editProfileButton:UIButton = {
         let bt  = UIButton()
@@ -97,12 +114,16 @@ class UserProfileHeaderCell: UICollectionReusableView {
         addSubview(userNameLabel)
         addSubview(stackLabels)
         addSubview(editProfileButton)
+        addSubview(topView)
         addSubview(stackButtons)
+        addSubview(bottomView)
         profileImage.anchor(top: topAnchor, leading: leadingAnchor, bottom: nil, trailing: nil,padding: .init(top: 12, left: 12, bottom: 0, right: 0),size: .init(width: 80, height: 80))
         userNameLabel.anchor(top: profileImage.bottomAnchor, leading: leadingAnchor, bottom: nil, trailing: trailingAnchor,padding: .init(top: 12, left: 12, bottom: 0, right: 0),size: .init(width: 0, height: 0))
          stackLabels.anchor(top: topAnchor, leading: profileImage.trailingAnchor, bottom: nil, trailing: trailingAnchor,padding: .init(top: 12, left: 12, bottom: 0, right: 12),size: .init(width: 0, height: 40))
         editProfileButton.anchor(top: stackLabels.bottomAnchor, leading: profileImage.trailingAnchor, bottom: nil, trailing: trailingAnchor,padding: .init(top: 12, left: 12, bottom: 0, right: 12),size: .init(width: 0, height: 30))
-        stackButtons.anchor(top: profileImage.bottomAnchor, leading: leadingAnchor, bottom: nil, trailing: trailingAnchor,padding: .init(top: 80, left: 12, bottom: 0, right: 12),size: .init(width: 0, height: 00))
+         topView.anchor(top: userNameLabel.bottomAnchor, leading: leadingAnchor, bottom: nil, trailing: trailingAnchor,padding: .init(top: 18, left: 0, bottom: 0, right: 0),size: .init(width: 0, height: 1))
+        stackButtons.anchor(top: topView.bottomAnchor, leading: leadingAnchor, bottom: nil, trailing: trailingAnchor,padding: .init(top: 12, left: 12, bottom: 0, right: 12),size: .init(width: 0, height: 0))
+         bottomView.anchor(top: stackButtons.bottomAnchor, leading: leadingAnchor, bottom: bottomAnchor, trailing: trailingAnchor,padding: .init(top: 18, left: 0, bottom: 0, right: 0),size: .init(width: 0, height: 0))
     }
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
