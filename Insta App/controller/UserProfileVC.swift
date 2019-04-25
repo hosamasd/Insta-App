@@ -7,20 +7,24 @@
 //
 
 import UIKit
-
+import FirebaseDatabase
+import FirebaseAuth
 class UserProfileVC: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     
     fileprivate let cellId = "cellId"
     fileprivate let headerId = "headerId"
     
+    var user: UserModel?
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView.backgroundColor = .white
-        navigationItem.title = "user profile"
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "gear").withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleLogOut))
-        collectionView.register(UserProfileCell.self, forCellWithReuseIdentifier: cellId)
-        collectionView.register(UserProfileHeaderCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
+        setupCollectionView()
+        fetchUser()
     }
+    
+     //MARK: -collectionView data source
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 10
@@ -44,6 +48,7 @@ class UserProfileVC: UICollectionViewController, UICollectionViewDelegateFlowLay
         String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier:
             headerId, for: indexPath) as! UserProfileHeaderCell
+        header.users = user
         return header
     }
     
@@ -63,7 +68,26 @@ class UserProfileVC: UICollectionViewController, UICollectionViewDelegateFlowLay
    
     //MARK: -user methods
     
+    fileprivate func setupCollectionView() {
+        collectionView.backgroundColor = .white
+        
+        collectionView.register(UserProfileCell.self, forCellWithReuseIdentifier: cellId)
+        collectionView.register(UserProfileHeaderCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
+    }
+    
+    func fetchUser()  {
+        guard let uids = Auth.auth().currentUser?.uid else { return  }
+        
+        Database.database().reference(withPath: "Users").child(uids).observeSingleEvent(of: .value) { (snapshot) in
+            guard let dict = snapshot.value as? [String:Any]else {return}
+            self.user = UserModel(dict: dict)
+          self.navigationItem.title =  dict["username"] as? String ?? "no name"
+            self.collectionView.reloadData()
+        }
+    }
+    
     //TODO: -handle methods
+    
    @objc func handleLogOut()  {
     let alert = UIAlertController(title: "sign out?", message: "Are you sure do you want to sign out?", preferredStyle: .actionSheet)
     let cancel = UIAlertAction(title: "Cancel", style: .default, handler: nil)

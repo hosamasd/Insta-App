@@ -10,6 +10,8 @@ import UIKit
 
 class UserProfileCell: UICollectionViewCell {
     
+   
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         

@@ -9,17 +9,18 @@
 import UIKit
 
 class UserProfileHeaderCell: UICollectionReusableView {
+    
     let profileImage:UIImageView = {
        let im = UIImageView()
-        im.backgroundColor = .red
         im.layer.cornerRadius = 80/2
         im.clipsToBounds = true
         return im
     }()
     let userNameLabel:UILabel = {
        let la = UILabel()
-        la.text = "user name"
+        la.textAlignment = .center
         la.font = UIFont.systemFont(ofSize: 16)
+       
          return la
     }()
     let postLabel:UILabel = {
@@ -98,6 +99,15 @@ class UserProfileHeaderCell: UICollectionReusableView {
          bt.tintColor = UIColor(white: 0, alpha: 0.2)
         return bt
     }()
+    
+    var users:UserModel? {
+        didSet{
+            guard let user = users else { return }
+            profileImage.loadImageUsingCacheWithUrlString(user.imageUrl)
+            userNameLabel.text = user.username
+        }
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = .white
@@ -118,7 +128,7 @@ class UserProfileHeaderCell: UICollectionReusableView {
         addSubview(stackButtons)
         addSubview(bottomView)
         profileImage.anchor(top: topAnchor, leading: leadingAnchor, bottom: nil, trailing: nil,padding: .init(top: 12, left: 12, bottom: 0, right: 0),size: .init(width: 80, height: 80))
-        userNameLabel.anchor(top: profileImage.bottomAnchor, leading: leadingAnchor, bottom: nil, trailing: trailingAnchor,padding: .init(top: 12, left: 12, bottom: 0, right: 0),size: .init(width: 0, height: 0))
+        userNameLabel.anchor(top: profileImage.bottomAnchor, leading: profileImage.leadingAnchor, bottom: nil, trailing: profileImage.trailingAnchor,padding: .init(top: 12, left: 0, bottom: 0, right: 0),size: .init(width: 0, height: 0))
          stackLabels.anchor(top: topAnchor, leading: profileImage.trailingAnchor, bottom: nil, trailing: trailingAnchor,padding: .init(top: 12, left: 12, bottom: 0, right: 12),size: .init(width: 0, height: 40))
         editProfileButton.anchor(top: stackLabels.bottomAnchor, leading: profileImage.trailingAnchor, bottom: nil, trailing: trailingAnchor,padding: .init(top: 12, left: 12, bottom: 0, right: 12),size: .init(width: 0, height: 30))
          topView.anchor(top: userNameLabel.bottomAnchor, leading: leadingAnchor, bottom: nil, trailing: trailingAnchor,padding: .init(top: 18, left: 0, bottom: 0, right: 0),size: .init(width: 0, height: 1))

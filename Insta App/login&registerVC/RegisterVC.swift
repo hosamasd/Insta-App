@@ -7,19 +7,24 @@
 //
 
 import UIKit
+import Firebase
+import FirebaseDatabase
 
 class RegisterVC: UIViewController {
 
-    lazy var plusPhotoButton:UIButton = {
-        let bt  = UIButton()
-        bt.setImage(#imageLiteral(resourceName: "plus_photo").withRenderingMode(.alwaysOriginal), for: .normal)
-        bt.addTarget(self, action: #selector(handleChangePhoto), for: .touchUpInside)
+    lazy var plusPhotoButton:UIImageView = {
+        let bt  = UIImageView()
+    bt.isUserInteractionEnabled = true
+        bt.image = #imageLiteral(resourceName: "plus_photo").withRenderingMode(.alwaysOriginal)
+        bt.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleChangePhoto)))
+       
        
         return bt
     }()
     let emailTextField:UITextField = {
        let tf = UITextField()
         tf.placeholder = "Email"
+         tf.text = "h@h.com"
         tf.font = UIFont.systemFont(ofSize: 14)
         tf.backgroundColor = UIColor(white: 0, alpha: 0.03)
      tf.borderStyle = .roundedRect
@@ -29,6 +34,7 @@ class RegisterVC: UIViewController {
     let userNameTextField:UITextField = {
         let tf = UITextField()
         tf.placeholder = "User Name"
+         tf.text = "hosam"
         tf.font = UIFont.systemFont(ofSize: 14)
         tf.backgroundColor = UIColor(white: 0, alpha: 0.03)
          tf.borderStyle = .roundedRect
@@ -38,6 +44,8 @@ class RegisterVC: UIViewController {
     let passwordTextField:UITextField = {
         let tf = UITextField()
         tf.placeholder = "Password"
+        tf.text = "123456"
+        tf.isSecureTextEntry = true
         tf.font = UIFont.systemFont(ofSize: 14)
         tf.backgroundColor = UIColor(white: 0, alpha: 0.03)
         tf.borderStyle = .roundedRect
@@ -104,7 +112,42 @@ class RegisterVC: UIViewController {
     }
     
     @objc  func handleSignUp()  {
-        print(123)
+       guard let email = emailTextField.text,
+        let userName = userNameTextField.text,
+        let password = passwordTextField.text
+       else { return  }
+        
+        Auth.auth().createUser(withEmail: email, password: password) { (users, err) in
+            
+            if  err == nil{
+                //something success happning
+                
+               
+                let uploadImage = self.uploadMedia(completion: { (urls) in
+                     guard let url = urls else{return}
+                    guard let uids = users?.user.uid else{return}
+                    
+                    let usernameVale = ["username": userName,"image-url":url]
+                    let values = [uids: usernameVale]
+                    
+                    Database.database().reference(withPath: "Users").updateChildValues(values, withCompletionBlock: { (err, ref) in
+                        if err == nil {
+                            print("successed")
+                        }else {
+                            print(err?.localizedDescription)
+                        }
+                    })
+
+                })
+                
+                
+                
+            }else{
+                 print("failed: ",err )
+               
+            }
+        }
+        
     }
     
     @objc func handleLoginPage(){
@@ -128,9 +171,9 @@ extension RegisterVC: UIImagePickerControllerDelegate, UINavigationControllerDel
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let editied = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
-            plusPhotoButton.setImage(editied.withRenderingMode(.alwaysOriginal), for: .normal)
+            plusPhotoButton.image = editied.withRenderingMode(.alwaysOriginal)
         }else if let original = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-            plusPhotoButton.setImage(original.withRenderingMode(.alwaysOriginal), for: .normal)
+            plusPhotoButton.image = original.withRenderingMode(.alwaysOriginal)
         }
         plusPhotoButton.layer.cornerRadius = plusPhotoButton.frame.width/2
         plusPhotoButton.clipsToBounds = true
@@ -139,4 +182,31 @@ extension RegisterVC: UIImagePickerControllerDelegate, UINavigationControllerDel
         
         dismiss(animated: true, completion: nil)
     }
+    
+    func uploadMedia(completion: @escaping (_ url: String?) -> Void) {
+        let imageName = NSUUID().uuidString
+        
+        let storageRef = Storage.storage().reference().child("profile-images").child(imageName)
+    
+        if let uploadData = self.plusPhotoButton.image!.jpegData(compressionQuality: 0.5){
+            storageRef.putData(uploadData, metadata: nil) { (ref, err) in
+               
+                    if err != nil {
+                        print("error")
+                        completion(nil)
+                    } else {
+                        storageRef.downloadURL(completion: { (urls, err) in
+                            if err == nil {
+                                if  let url = urls?.absoluteString {
+                                    completion(url)
+                                }
+                            }}
+                            )
+                        
+                        // your uploaded photo url.
+                    }
+            }
+            }
+        }
+    
 }

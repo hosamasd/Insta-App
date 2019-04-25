@@ -42,6 +42,7 @@ class LoginVC: UIViewController {
     }()
     let passwordTextField:UITextField = {
         let tf = UITextField()
+        tf.isSecureTextEntry = true
         tf.placeholder = "Password"
         tf.font = UIFont.systemFont(ofSize: 14)
         tf.backgroundColor = UIColor(white: 0, alpha: 0.03)
