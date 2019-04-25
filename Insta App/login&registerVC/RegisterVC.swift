@@ -139,9 +139,6 @@ class RegisterVC: UIViewController {
                     })
 
                 })
-                
-                
-                
             }else{
                  print("failed: ",err )
                
@@ -202,8 +199,6 @@ extension RegisterVC: UIImagePickerControllerDelegate, UINavigationControllerDel
                                 }
                             }}
                             )
-                        
-                        // your uploaded photo url.
                     }
             }
             }

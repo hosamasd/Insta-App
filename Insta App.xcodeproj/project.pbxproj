@@ -28,6 +28,7 @@
 		4EF6B72922702FA900504AE6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4EF6B72822702FA900504AE6 /* Assets.xcassets */; };
 		4EF6B72C22702FA900504AE6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4EF6B72A22702FA900504AE6 /* LaunchScreen.storyboard */; };
 		4EF6B73422702FB600504AE6 /* ExtensionUivew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EF6B73322702FB600504AE6 /* ExtensionUivew.swift */; };
+		4EFBCDBC2271F6D300BDC669 /* SharePhotoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EFBCDBB2271F6D300BDC669 /* SharePhotoVC.swift */; };
 		7A470FFDA6D7EA19F89870B1 /* Pods_Insta_App.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DB1CD3D05262F7822E5A200 /* Pods_Insta_App.framework */; };
 /* End PBXBuildFile section */
 
@@ -58,6 +59,7 @@
 		4EF6B72B22702FA900504AE6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4EF6B72D22702FA900504AE6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4EF6B73322702FB600504AE6 /* ExtensionUivew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionUivew.swift; sourceTree = "<group>"; };
+		4EFBCDBB2271F6D300BDC669 /* SharePhotoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharePhotoVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,6 +139,7 @@
 				4E957E24227086F50042B39E /* LikeVC.swift */,
 				4E77ADD52270422D00B09397 /* UserProfileVC.swift */,
 				4E957E2622708C920042B39E /* PhotoSelectorVC.swift */,
+				4EFBCDBB2271F6D300BDC669 /* SharePhotoVC.swift */,
 			);
 			path = controller;
 			sourceTree = "<group>";
@@ -312,6 +315,7 @@
 				4EC646EE2271D81400E58A3C /* PhotoSelectorCell.swift in Sources */,
 				4ED09DE82271B32200025445 /* UserModel.swift in Sources */,
 				4E77ADD4227041E500B09397 /* MainTabBarVC.swift in Sources */,
+				4EFBCDBC2271F6D300BDC669 /* SharePhotoVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

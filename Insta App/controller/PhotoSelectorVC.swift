@@ -9,6 +9,8 @@
 import UIKit
 import Photos
 
+
+
 class PhotoSelectorVC: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     
     fileprivate let cellId = "cellId"
@@ -16,6 +18,7 @@ class PhotoSelectorVC: UICollectionViewController, UICollectionViewDelegateFlowL
     var imageStorageArray = [UIImage]()
     var selectedImage:UIImage?
     var assets = [PHAsset]()
+    var sharedImage: UIImage?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,14 +62,11 @@ class PhotoSelectorVC: UICollectionViewController, UICollectionViewDelegateFlowL
                         DispatchQueue.main.async {
                             self.collectionView.reloadData()
                         }
-                        
                     }
                 })
-                
             }
         }
-        
-    }
+     }
     
     
     override var prefersStatusBarHidden: Bool{
@@ -103,6 +103,7 @@ class PhotoSelectorVC: UICollectionViewController, UICollectionViewDelegateFlowL
                 
                 imageManage.requestImage(for: selectAsset, targetSize: targetSize, contentMode: .default, options: nil) { (imagee, info) in
                     header.selectedImage.image = imagee
+                    self.sharedImage = imagee
                 }
             }
         }
@@ -113,7 +114,8 @@ class PhotoSelectorVC: UICollectionViewController, UICollectionViewDelegateFlowL
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
          selectedImage = imageStorageArray[indexPath.row]
         self.collectionView.reloadData()
-       
+        let index = IndexPath(item: 0, section: 0)
+       collectionView.scrollToItem(at: index, at: .bottom, animated: true)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
@@ -145,6 +147,9 @@ class PhotoSelectorVC: UICollectionViewController, UICollectionViewDelegateFlowL
     }
     
     @objc func handleNext(){
-        print(321)
+        let share = SharePhotoVC()
+        
+       share.selectedImage = sharedImage
+        navigationController?.pushViewController(share, animated: true)
     }
 }
