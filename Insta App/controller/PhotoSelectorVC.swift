@@ -13,15 +13,16 @@ class PhotoSelectorVC: UICollectionViewController, UICollectionViewDelegateFlowL
     
     fileprivate let cellId = "cellId"
     fileprivate let headerId = "headerId"
-
+    var imageStorageArray = [UIImage]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancel))
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Next", style: .plain, target: self, action: #selector(handleNext))
 
-        collectionView.backgroundColor = .green
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: cellId)
+        collectionView.backgroundColor = .white
+        collectionView.register(PhotoSelectorCell.self, forCellWithReuseIdentifier: cellId)
         collectionView.register(PhotoSelectorHeaderCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
 
         fetchPhotos()
@@ -30,14 +31,21 @@ class PhotoSelectorVC: UICollectionViewController, UICollectionViewDelegateFlowL
     fileprivate func fetchPhotos(){
         let fetchOptions = PHFetchOptions()
         fetchOptions.fetchLimit = 10
+        fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
        let allPhotos = PHAsset.fetchAssets(with: fetchOptions)
         allPhotos.enumerateObjects { (asset, count, stop) in
             
             let imageManager = PHImageManager.default()
             let size = CGSize(width: 350, height: 350)
-            
-            imageManager.requestImage(for: asset, targetSize: size, contentMode: .aspectFit, options: nil, resultHandler: { (image, info) in
-                print(image)
+            let options = PHImageRequestOptions()
+            options.isSynchronous = true
+            imageManager.requestImage(for: asset, targetSize: size, contentMode: .aspectFit, options: options, resultHandler: { (images, info) in
+                guard let image = images else{return}
+                self.imageStorageArray.append(image)
+                
+                if count == allPhotos.count - 1 {
+                    self.collectionView.reloadData()
+                }
             })
             
         }
@@ -51,12 +59,14 @@ class PhotoSelectorVC: UICollectionViewController, UICollectionViewDelegateFlowL
     //MARK: -collectionView data source
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return imageStorageArray.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath)
-        cell.backgroundColor = .red
+        let index = imageStorageArray[indexPath.item]
+        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! PhotoSelectorCell
+        cell.fullImage.image = index
         
         return cell
     }

@@ -13,6 +13,8 @@ class PhotoSelectorHeaderCell: UICollectionReusableView {
     let selectedImage:UIImageView = {
         let im = UIImageView()
         im.backgroundColor = .blue
+        im.contentMode = .scaleAspectFill
+        im.clipsToBounds = true
         return im
     }()
     
