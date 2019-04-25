@@ -7,10 +7,11 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class LoginVC: UIViewController {
     let mainView:UIView = {
-       let mv = UIView()
+        let mv = UIView()
         mv.backgroundColor = UIColor(r: 0, g: 120, b: 175)
         
         return mv
@@ -19,7 +20,7 @@ class LoginVC: UIViewController {
     let  mainImageLogo:UIImageView = {
         let bt  = UIImageView(image: #imageLiteral(resourceName: "Instagram_logo_white"))
         bt.contentMode = .scaleAspectFill
-      
+        
         return bt
     }()
     lazy var signUpButton:UIButton = {
@@ -34,20 +35,22 @@ class LoginVC: UIViewController {
     let emailTextField:UITextField = {
         let tf = UITextField()
         tf.placeholder = "Email"
+        tf.text = "h@h.com"
         tf.font = UIFont.systemFont(ofSize: 14)
         tf.backgroundColor = UIColor(white: 0, alpha: 0.03)
         tf.borderStyle = .roundedRect
-         tf.addTarget(self, action: #selector(handleTextChange), for: .editingChanged)
+        tf.addTarget(self, action: #selector(handleTextChange), for: .editingChanged)
         return tf
     }()
     let passwordTextField:UITextField = {
         let tf = UITextField()
         tf.isSecureTextEntry = true
         tf.placeholder = "Password"
+        tf.text = "123456"
         tf.font = UIFont.systemFont(ofSize: 14)
         tf.backgroundColor = UIColor(white: 0, alpha: 0.03)
         tf.borderStyle = .roundedRect
-         tf.addTarget(self, action: #selector(handleTextChange), for: .editingChanged)
+        tf.addTarget(self, action: #selector(handleTextChange), for: .editingChanged)
         return tf
     }()
     lazy var loginButton:UIButton = {
@@ -82,7 +85,7 @@ class LoginVC: UIViewController {
     func setupViews()  {
         let stacks = getStacks(view: emailTextField,passwordTextField, axis: .vertical)
         
-
+        
         view.addSubview(mainView)
         view.addSubview(signUpButton)
         view.addSubview(stacks)
@@ -95,24 +98,38 @@ class LoginVC: UIViewController {
         mainImageLogo.centerYAnchor.constraint(equalTo: mainView.centerYAnchor).isActive = true
         
         stacks.anchor(top: mainView.bottomAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor,padding: .init(top: 50, left: 40, bottom: 0, right: 40),size: .init(width: 0, height: 120))
-         loginButton.anchor(top: stacks.bottomAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor,padding: .init(top: 20, left: 40, bottom: 0, right: 40),size: .init(width: 0, height: 50))
+        loginButton.anchor(top: stacks.bottomAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor,padding: .init(top: 20, left: 40, bottom: 0, right: 40),size: .init(width: 0, height: 50))
         signUpButton.anchor(top: nil, leading: view.leadingAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor ,trailing: view.trailingAnchor,padding: .init(top: 0, left: 32, bottom: 8, right: 32),size: .init(width: 0, height: 30))
-       
+        
     }
     
     //TODO: -handle methods
     
-   @objc func handleSignUpPage()  {
+    @objc func handleSignUpPage()  {
         let register = RegisterVC()
         navigationController?.pushViewController(register, animated: true)
     }
     
     @objc func handleLogin(){
-       print(123)
+        guard let email = emailTextField.text,
+            let password = passwordTextField.text
+            else { return  }
+        Auth.auth().signIn(withEmail: email, password: password) { (user, err) in
+            if  err == nil{
+                
+                self.dismiss(animated: true, completion: nil)
+            }else {
+                print("errored")
+            }
+        }
+        
+        
+        
+        
     }
     
     @objc func handleTextChange(){
-        let isFormValid = emailTextField.text?.characters.count ?? 0 > 0 && passwordTextField.text?.characters.count ?? 0 > 0
+        let isFormValid = emailTextField.text?.count ?? 0 > 0 && passwordTextField.text?.count ?? 0 > 0
         
         if isFormValid {
             loginButton.isEnabled = true

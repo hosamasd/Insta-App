@@ -91,8 +91,20 @@ class UserProfileVC: UICollectionViewController, UICollectionViewDelegateFlowLay
    @objc func handleLogOut()  {
     let alert = UIAlertController(title: "sign out?", message: "Are you sure do you want to sign out?", preferredStyle: .actionSheet)
     let cancel = UIAlertAction(title: "Cancel", style: .default, handler: nil)
-    let ok  = UIAlertAction(title: "OK", style: .destructive) { (tex) in
-        print("sign out process")
+    let ok  = UIAlertAction(title: "Sign out", style: .destructive) { (tex) in
+        do{
+            try Auth.auth().signOut()
+            
+            DispatchQueue.main.async {
+                let login = LoginVC()
+                let nav = UINavigationController(rootViewController: login)
+                self.present(nav, animated: true, completion: nil)
+            }
+            print("sign out process")
+        }catch let err {
+            print(err.localizedDescription)
+        }
+        
     }
     alert.addAction(ok)
     alert.addAction(cancel)

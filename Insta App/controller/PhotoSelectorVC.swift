@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Photos
 
 class PhotoSelectorVC: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     
@@ -23,7 +24,25 @@ class PhotoSelectorVC: UICollectionViewController, UICollectionViewDelegateFlowL
         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: cellId)
         collectionView.register(PhotoSelectorHeaderCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
 
+        fetchPhotos()
     }
+    
+    fileprivate func fetchPhotos(){
+        let fetchOptions = PHFetchOptions()
+        fetchOptions.fetchLimit = 10
+       let allPhotos = PHAsset.fetchAssets(with: fetchOptions)
+        allPhotos.enumerateObjects { (asset, count, stop) in
+            
+            let imageManager = PHImageManager.default()
+            let size = CGSize(width: 350, height: 350)
+            
+            imageManager.requestImage(for: asset, targetSize: size, contentMode: .aspectFit, options: nil, resultHandler: { (image, info) in
+                print(image)
+            })
+            
+        }
+    }
+    
     
     override var prefersStatusBarHidden: Bool{
         return true

@@ -7,19 +7,18 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class MainTabBarVC: UITabBarController {
     
-    var isLogin = true
+   
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         //check if login or not
         self.delegate = self
-        if !isLogin {
-            checkLoginState()
-        }
+        checkLoginState()
         
         setupViewControllers()
    }
@@ -52,11 +51,14 @@ class MainTabBarVC: UITabBarController {
     }
     
    fileprivate func checkLoginState()  {
+    if Auth.auth().currentUser?.uid == nil {
         DispatchQueue.main.async {
             let login = LoginVC()
             let nav = UINavigationController(rootViewController: login)
             self.present(nav, animated: true, completion: nil)
         }
+    }
+    
     }
     
     fileprivate func templateNavControllerVC(unselectedImage: UIImage, selectedImage: UIImage, rootViewController: UIViewController = UIViewController()) -> UINavigationController {
@@ -80,5 +82,6 @@ extension MainTabBarVC: UITabBarControllerDelegate {
           return false
         }
         return true
+        
     }
 }
