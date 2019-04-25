@@ -10,11 +10,12 @@ import UIKit
 
 class PhotoSelectorHeaderCell: UICollectionReusableView {
     
-    let selectedImage:UIImageView = {
+    lazy var selectedImage:UIImageView = {
         let im = UIImageView()
-        im.backgroundColor = .blue
+        im.backgroundColor = .cyan
         im.contentMode = .scaleAspectFill
         im.clipsToBounds = true
+        im.isUserInteractionEnabled = true
         return im
     }()
     
@@ -29,7 +30,7 @@ class PhotoSelectorHeaderCell: UICollectionReusableView {
        
         addSubview(selectedImage)
         
-        selectedImage.anchor(top: topAnchor, leading: leadingAnchor, bottom: nil, trailing: trailingAnchor,padding: .init(top: 0, left: 0, bottom: 0, right: 0),size: .init(width: 0, height: 200))
+        selectedImage.fillSuperview()
     }
     
     required init?(coder aDecoder: NSCoder) {
