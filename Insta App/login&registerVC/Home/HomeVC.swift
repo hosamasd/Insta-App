@@ -14,6 +14,7 @@ class HomeVC: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     
     fileprivate let cellId = "cellId"
     var posts = [PostModel]()
+    var users:UserModel?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,6 +26,14 @@ class HomeVC: UICollectionViewController, UICollectionViewDelegateFlowLayout {
         collectionView.backgroundColor = .white
         collectionView.register(HomeCell.self, forCellWithReuseIdentifier: cellId)
         
+//        fetchOrderdPostes()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        fetchUser()
+        
+        // fetchPosts()
         fetchOrderdPostes()
     }
     
@@ -41,8 +50,9 @@ class HomeVC: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let height = view.frame.width + 40 + 16 + 50
-        
+        var height = view.frame.width + 40 + 16
+        height += 50 // for action buttons
+        height += 90 // for caption posts
         return .init(width: view.frame.width, height: height)
     }
     
@@ -54,13 +64,25 @@ class HomeVC: UICollectionViewController, UICollectionViewDelegateFlowLayout {
         return 2
     }
     
+    func fetchUser()  {
+        guard let uids = Auth.auth().currentUser?.uid else { return  }
+        
+        Database.database().reference(withPath: "Users").child(uids).observeSingleEvent(of: .value) { (snapshot) in
+            guard let dict = snapshot.value as? [String:Any]else {return}
+            self.users = UserModel(dict: dict)
+           
+            self.collectionView.reloadData()
+        }
+    }
+    
     func fetchOrderdPostes()  {
         posts.removeAll()
         guard let uids = Auth.auth().currentUser?.uid else {return}
         Database.database().reference(withPath: "Posts").child(uids).queryOrdered(byChild: "creationDate").observe(.childAdded) { (snapshot) in
             
             guard let dict  = snapshot.value as? [String:Any] else {return}
-            let post = PostModel(dict: dict)
+             guard let user = self.users  else {return}
+            let post = PostModel(user: user, dict: dict)
             self.posts.append(post)
             
             self.collectionView.reloadData()

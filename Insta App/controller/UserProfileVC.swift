@@ -105,7 +105,8 @@ class UserProfileVC: UICollectionViewController, UICollectionViewDelegateFlowLay
             dictionaries.forEach({ (key,value) in
                
                 guard let dict = value as?[String:Any] else {return}
-                let post = PostModel(dict: dict)
+                 guard let user = self.user  else {return}
+                let post = PostModel(user: user, dict: dict)
                 self.posts.append(post)
             })
             
@@ -120,7 +121,8 @@ class UserProfileVC: UICollectionViewController, UICollectionViewDelegateFlowLay
         Database.database().reference(withPath: "Posts").child(uids).queryOrdered(byChild: "creationDate").observe(.childAdded) { (snapshot) in
            
             guard let dict  = snapshot.value as? [String:Any] else {return}
-            let post = PostModel(dict: dict)
+             guard let user = self.user else {return}
+            let post = PostModel(user: user, dict: dict)
             self.posts.append(post)
             
             self.collectionView.reloadData()

@@ -10,9 +10,12 @@ import Foundation
 
 struct PostModel {
     let imageUrl:String
-    
-    init(dict: [String:Any]) {
+    let caption:String
+    let user:UserModel
+    init(user:UserModel,dict: [String:Any]) {
         self.imageUrl = dict["image-url"] as? String ?? ""
+        self.user = user
+        self.caption = dict["caption"] as? String ?? ""
     }
     
 }

@@ -26,13 +26,14 @@ class MainTabBarVC: UITabBarController {
     //MARK: -USER METHODS
     
     fileprivate func setupViewControllers() {
-        let layout = UICollectionViewFlowLayout()
+       
         
-        let home = templateNavControllerVC(unselectedImage: #imageLiteral(resourceName: "home_unselected"), selectedImage: #imageLiteral(resourceName: "home_selected"), rootViewController: HomeVC(collectionViewLayout: layout ))
+        let home = templateNavControllerVC(unselectedImage: #imageLiteral(resourceName: "home_unselected"), selectedImage: #imageLiteral(resourceName: "home_selected"), rootViewController: HomeVC(collectionViewLayout: UICollectionViewFlowLayout() ))
          let search = templateNavControllerVC(unselectedImage: #imageLiteral(resourceName: "search_unselected"), selectedImage: #imageLiteral(resourceName: "search_selected"), rootViewController: SearchVC())
          let like = templateNavControllerVC(unselectedImage: #imageLiteral(resourceName: "like_unselected"), selectedImage: #imageLiteral(resourceName: "like_selected"), rootViewController: LikeVC())
          let plus = templateNavControllerVC(unselectedImage: #imageLiteral(resourceName: "plus_unselected"), selectedImage: #imageLiteral(resourceName: "plus_unselected"), rootViewController: PlusVC())
         
+         let layout = UICollectionViewFlowLayout()
         let userProfile = UserProfileVC(collectionViewLayout: layout )
         let userProdVC = templateNavControllerVC(unselectedImage: #imageLiteral(resourceName: "profile_unselected"), selectedImage: #imageLiteral(resourceName: "profile_selected"), rootViewController: userProfile)
         
