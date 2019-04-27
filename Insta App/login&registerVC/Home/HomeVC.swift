@@ -26,19 +26,17 @@ class HomeVC: UICollectionViewController, UICollectionViewDelegateFlowLayout {
         collectionView.backgroundColor = .white
         collectionView.register(HomeCell.self, forCellWithReuseIdentifier: cellId)
         
-//        fetchOrderdPostes()
-//        fetchUser()
+        fetchUser()
         
-        // fetchPosts()
-//        fetchOrderdPostes()
+        fetchFollowingPosts()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        fetchUser()
-
-        // fetchPosts()
-       // fetchOrderdPostes()
+        
+//        fetchUser()
+//
+//        fetchFollowingPosts()
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -68,13 +66,26 @@ class HomeVC: UICollectionViewController, UICollectionViewDelegateFlowLayout {
         return 2
     }
     
+    func fetchFollowingPosts()  {
+        guard let uids = Auth.auth().currentUser?.uid else { return  }
+        Database.database().reference(withPath: "Following").child(uids).observeSingleEvent(of: .value) { (snapshot) in
+            guard let uidsDict = snapshot.value as? [String: Any] else { return  }
+
+            uidsDict.forEach({ (key,value) in
+                Database.database().loadUserInfo(uid: key, completion: { (user) in
+                     self.fetchOrderdPostes(uid: key, user: user)
+                })
+               
+            })
+        }
+    }
+    
     func fetchUser()  {
         guard let uids = Auth.auth().currentUser?.uid else { return  }
         
         Database.database().loadUserInfo(uid: uids) { (user) in
-            self.users = user
-            self.collectionView.reloadData()
-            self.fetchOrderdPostes()
+            
+            self.fetchOrderdPostes(uid: uids, user: user)
         }
         
            
@@ -82,13 +93,13 @@ class HomeVC: UICollectionViewController, UICollectionViewDelegateFlowLayout {
         
     }
     
-    func fetchOrderdPostes()  {
-        posts.removeAll()
-        guard let uids = Auth.auth().currentUser?.uid else {return}
-        Database.database().reference(withPath: "Posts").child(uids).queryOrdered(byChild: "creationDate").observe(.childAdded) { (snapshot) in
+    func fetchOrderdPostes(uid:String,user:UserModel)  {
+//        posts.removeAll()
+        
+         Database.database().reference(withPath: "Posts").child(uid).queryOrdered(byChild: "creationDate").observe(.childAdded) { (snapshot) in
             
             guard let dict  = snapshot.value as? [String:Any] else {return}
-             guard let user = self.users  else {return}
+            
             let post = PostModel(user: user, dict: dict)
             self.posts.append(post)
             
