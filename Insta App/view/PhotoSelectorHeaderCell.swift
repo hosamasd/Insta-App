@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PhotoSelectorHeaderCell: UICollectionReusableView {
+class PhotoSelectorHeaderCell: BaseCell {
     
     lazy var selectedImage:UIImageView = {
         let im = UIImageView()
@@ -19,21 +19,14 @@ class PhotoSelectorHeaderCell: UICollectionReusableView {
         return im
     }()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        self.backgroundColor = .white
-        
-        setupViews()
-    }
+  
     
-    func setupViews()  {
-       
+  override  func setupViews()  {
+       super.setupViews()
         addSubview(selectedImage)
         
         selectedImage.fillSuperview()
     }
     
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+   
 }

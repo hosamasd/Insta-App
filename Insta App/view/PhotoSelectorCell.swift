@@ -8,26 +8,21 @@
 
 import UIKit
 
-class PhotoSelectorCell: UICollectionViewCell {
+class PhotoSelectorCell: BaseCell {
     let fullImage:UIImageView = {
         let im = UIImageView()
         im.backgroundColor = UIColor.lightGray
         
         return im
     }()
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
-       setupViews()
-    }
+  
     
-    fileprivate func setupViews(){
+    override func setupViews(){
+        super.setupViews()
         addSubview(fullImage)
         
         fullImage.fillSuperview()
     }
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    
     
 }

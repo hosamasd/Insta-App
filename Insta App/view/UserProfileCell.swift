@@ -8,7 +8,7 @@
 
 import UIKit
 
-class UserProfileCell: UICollectionViewCell {
+class UserProfileCell: BaseCell {
     
     var posts:PostModel?  {
         didSet{
@@ -26,20 +26,15 @@ class UserProfileCell: UICollectionViewCell {
         return im
     }()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
-         setupViews()
-        
-    }
+   
     
-    fileprivate func setupViews(){
+    
+    override func setupViews(){
+    super.setupViews()
         addSubview(fullImage)
         
         fullImage.fillSuperview()
     }
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+   
     
 }

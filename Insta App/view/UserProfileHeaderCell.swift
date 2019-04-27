@@ -8,7 +8,7 @@
 
 import UIKit
 
-class UserProfileHeaderCell: UICollectionReusableView {
+class UserProfileHeaderCell: BaseCell {
     
     let profileImage:UIImageView = {
        let im = UIImageView()
@@ -109,14 +109,10 @@ class UserProfileHeaderCell: UICollectionReusableView {
         }
     }
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        self.backgroundColor = .white
-       
-        setupViews()
-    }
+   
     
-    func setupViews()  {
+    override func setupViews()  {
+        super.setupViews()
         let stackButtons = getStacks(view: gridButton,listButton,bookmarkButton)
         let stackLabels = getStacks(view: postLabel,followersLabel,followeringLabel)
         
@@ -136,9 +132,7 @@ class UserProfileHeaderCell: UICollectionReusableView {
         stackButtons.anchor(top: topView.bottomAnchor, leading: leadingAnchor, bottom: nil, trailing: trailingAnchor,padding: .init(top: 12, left: 12, bottom: 0, right: 12),size: .init(width: 0, height: 0))
          bottomView.anchor(top: stackButtons.bottomAnchor, leading: leadingAnchor, bottom: bottomAnchor, trailing: trailingAnchor,padding: .init(top: 18, left: 0, bottom: 0, right: 0),size: .init(width: 0, height: 0))
     }
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+  
     
     func getStacks(view: UIView...) -> UIStackView {
         let stacks = UIStackView(arrangedSubviews: view)
