@@ -13,6 +13,7 @@ class UserProfileVC: UICollectionViewController, UICollectionViewDelegateFlowLay
     
     fileprivate let cellId = "cellId"
     fileprivate let headerId = "headerId"
+    var userUids:String?
     
     var user: UserModel?
     var posts: [PostModel] = []
@@ -87,7 +88,7 @@ class UserProfileVC: UICollectionViewController, UICollectionViewDelegateFlowLay
     }
     
     func fetchUser()  {
-        guard let uids = Auth.auth().currentUser?.uid else { return  }
+         let uids = userUids ??  (Auth.auth().currentUser?.uid ?? "")
         
         Database.database().loadUserInfo(uid: uids) { (user) in
             self.user = user
@@ -99,7 +100,7 @@ class UserProfileVC: UICollectionViewController, UICollectionViewDelegateFlowLay
     }
     
     func fetchPosts()  {
-        guard let uids = Auth.auth().currentUser?.uid else {return}
+        guard  let uids = Auth.auth().currentUser?.uid  else {return}
         Database.database().reference(withPath: "Posts").child(uids).observeSingleEvent(of: .value) { (sanpshot) in
             guard let dictionaries = sanpshot.value as?[String:Any] else {return}
             
@@ -118,7 +119,7 @@ class UserProfileVC: UICollectionViewController, UICollectionViewDelegateFlowLay
     
     func fetchOrderdPostes()  {
         posts.removeAll()
-        guard let uids = Auth.auth().currentUser?.uid else {return}
+        guard let uids = self.user?.uid else {return}
         Database.database().reference(withPath: "Posts").child(uids).queryOrdered(byChild: "creationDate").observe(.childAdded) { (snapshot) in
            
             guard let dict  = snapshot.value as? [String:Any] else {return}

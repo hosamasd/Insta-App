@@ -18,4 +18,10 @@ class UserModel {
         self.imageUrl = dict["image-url"] as? String ?? "nil"
         self.uid = uids
     }
+    
+    init(dict: [String:Any]) {
+        self.username = dict["username"] as? String ?? "none"
+        self.imageUrl = dict["image-url"] as? String ?? "nil"
+       self.uid = ""
+    }
 }

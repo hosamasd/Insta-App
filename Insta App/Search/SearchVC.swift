@@ -13,7 +13,7 @@ class SearchVC: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     
     fileprivate let cellId = "cellId"
     var users = [UserModel]()
-    
+    var filterUsers = [UserModel]()
     
     lazy var searchBar:UISearchBar = {
        let se = UISearchBar()
@@ -31,32 +31,63 @@ class SearchVC: UICollectionViewController, UICollectionViewDelegateFlowLayout {
         collectionView.backgroundColor = .white
         collectionView.register(SearchCell.self, forCellWithReuseIdentifier: cellId)
         collectionView.alwaysBounceVertical = true
-        
+        collectionView.keyboardDismissMode = .onDrag
         fetchUsers()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        searchBar.resignFirstResponder()
+        searchBar.isHidden = false
+//        fetchUsers()
+    }
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return users.count
+        return filterUsers.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! SearchCell
-        let user = users[indexPath.row]
+        let user = filterUsers[indexPath.row]
         
         cell.users = user
         return cell
     }
     
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        searchBar.isHidden = true
+        searchBar.resignFirstResponder()
+        let userProf =  UserProfileVC(collectionViewLayout: UICollectionViewFlowLayout() )
+        userProf.userUids = users[indexPath.item].uid
+        navigationController?.pushViewController(userProf, animated: true)
+        
+    }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return .init(width: view.frame.width, height: 100)
     }
     
     func fetchUsers()  {
-        guard let uids = Auth.auth().currentUser?.uid else { return  }
-        Database.database().loadUserInfo(uid: uids) { (user) in
-            self.users.append(user)
-            self.collectionView.reloadData()
-        }
+//    self.users.removeAll()
+//        self.filterUsers.removeAll()
+        
+        Database.database().reference(withPath: "Users").observe(.childAdded) { (snapshot) in
+           guard let dictionary = snapshot.key as? String else {return}
+           
+                Database.database().loadUserInfo(uid: dictionary, completion: { (user) in
+                   self.users.append(user)
+                    
+                    self.users.sort(by: { (u1, u2) -> Bool in
+                        return u1.username.compare(u2.username) == .orderedAscending
+                 
+                })
+                    self.filterUsers = self.users
+          self.collectionView.reloadData()
+            })
+            
+            
+            }
+        
+       
+        
     }
     func setupViews()  {
         navigationController?.navigationBar.addSubview(searchBar)
@@ -69,6 +100,14 @@ class SearchVC: UICollectionViewController, UICollectionViewDelegateFlowLayout {
 extension SearchVC: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        print(2222)
+        if searchText.isEmpty {
+            filterUsers = users
+        }else {
+        self.filterUsers = users.filter({ (user) -> Bool in
+             user.username.lowercased().contains(searchText.lowercased())
+        })
+       
+    }
+         self.collectionView.reloadData()
     }
 }

@@ -132,7 +132,7 @@ class RegisterVC: UIViewController {
                     
                     Database.database().reference(withPath: "Users").updateChildValues(values, withCompletionBlock: { (err, ref) in
                         if err == nil {
-                            print("successed")
+                            self.dismiss(animated: true, completion: nil)
                         }else {
                             print(err?.localizedDescription)
                         }

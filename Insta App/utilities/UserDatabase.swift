@@ -20,8 +20,20 @@ extension Database {
             
               completion(user)
             }
-            
-        
         }
+    
+    func loadAllUserOnly(uids: String,completion: @escaping ([UserModel])->())  {
+        
+        Database.database().reference(withPath: "Users").child(uids).observe(.childAdded) { (snapshot) in
+           
+                guard let dictionaries = snapshot.key as?[String:Any] else {return}
+            guard let dict = dictionaries.values as? [String:Any] else {return}
+                let user = UserModel( dict: dict)
+                
+                completion([user])
+        }
+        }
+    
+
     
 }
