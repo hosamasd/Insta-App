@@ -27,14 +27,18 @@ class HomeVC: UICollectionViewController, UICollectionViewDelegateFlowLayout {
         collectionView.register(HomeCell.self, forCellWithReuseIdentifier: cellId)
         
 //        fetchOrderdPostes()
+//        fetchUser()
+        
+        // fetchPosts()
+//        fetchOrderdPostes()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         fetchUser()
-        
+
         // fetchPosts()
-        fetchOrderdPostes()
+       // fetchOrderdPostes()
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -67,12 +71,15 @@ class HomeVC: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     func fetchUser()  {
         guard let uids = Auth.auth().currentUser?.uid else { return  }
         
-        Database.database().reference(withPath: "Users").child(uids).observeSingleEvent(of: .value) { (snapshot) in
-            guard let dict = snapshot.value as? [String:Any]else {return}
-            self.users = UserModel(dict: dict)
-           
+        Database.database().loadUserInfo(uid: uids) { (user) in
+            self.users = user
             self.collectionView.reloadData()
+            self.fetchOrderdPostes()
         }
+        
+           
+        
+        
     }
     
     func fetchOrderdPostes()  {

@@ -30,7 +30,7 @@ class UserProfileVC: UICollectionViewController, UICollectionViewDelegateFlowLay
         fetchUser()
         
       // fetchPosts()
-        fetchOrderdPostes()
+      //  fetchOrderdPostes()
     }
      //MARK: -collectionView data source
     
@@ -89,12 +89,13 @@ class UserProfileVC: UICollectionViewController, UICollectionViewDelegateFlowLay
     func fetchUser()  {
         guard let uids = Auth.auth().currentUser?.uid else { return  }
         
-        Database.database().reference(withPath: "Users").child(uids).observeSingleEvent(of: .value) { (snapshot) in
-            guard let dict = snapshot.value as? [String:Any]else {return}
-            self.user = UserModel(dict: dict)
-          self.navigationItem.title =  dict["username"] as? String ?? "no name"
-            self.collectionView.reloadData()
+        Database.database().loadUserInfo(uid: uids) { (user) in
+            self.user = user
+            self.navigationItem.title =  user.username
+            self.fetchOrderdPostes()
         }
+        
+        
     }
     
     func fetchPosts()  {

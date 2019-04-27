@@ -11,9 +11,11 @@ import UIKit
 class UserModel {
     let username:String
     let imageUrl:String
+    let uid:String
     
-    init(dict: [String:Any]) {
+    init(uids:String,dict: [String:Any]) {
         self.username = dict["username"] as? String ?? "none"
         self.imageUrl = dict["image-url"] as? String ?? "nil"
+        self.uid = uids
     }
 }
