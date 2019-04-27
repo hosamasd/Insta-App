@@ -81,6 +81,7 @@ class UserProfileHeaderCell: UICollectionReusableView {
     lazy var gridButton:UIButton = {
         let bt  = UIButton()
         bt.setImage(#imageLiteral(resourceName: "grid"), for: .normal)
+        bt.tintColor = UIColor.blue
 //        bt.addTarget(self, action: #selector(handleChangePhoto), for: .touchUpInside)
         
         return bt

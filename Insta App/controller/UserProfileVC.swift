@@ -15,23 +15,34 @@ class UserProfileVC: UICollectionViewController, UICollectionViewDelegateFlowLay
     fileprivate let headerId = "headerId"
     
     var user: UserModel?
+    var posts: [PostModel] = []
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "gear").withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleLogOut))
         setupCollectionView()
-        fetchUser()
+        
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        fetchUser()
+        
+      // fetchPosts()
+        fetchOrderdPostes()
+    }
      //MARK: -collectionView data source
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return posts.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! UserProfileCell
+        let post = posts[indexPath.item]
+        
+        cell.posts = post
         
         return cell
     }
@@ -86,6 +97,35 @@ class UserProfileVC: UICollectionViewController, UICollectionViewDelegateFlowLay
         }
     }
     
+    func fetchPosts()  {
+        guard let uids = Auth.auth().currentUser?.uid else {return}
+        Database.database().reference(withPath: "Posts").child(uids).observeSingleEvent(of: .value) { (sanpshot) in
+            guard let dictionaries = sanpshot.value as?[String:Any] else {return}
+            
+            dictionaries.forEach({ (key,value) in
+               
+                guard let dict = value as?[String:Any] else {return}
+                let post = PostModel(dict: dict)
+                self.posts.append(post)
+            })
+            
+            self.collectionView.reloadData()
+        }
+
+    }
+    
+    func fetchOrderdPostes()  {
+        posts.removeAll()
+        guard let uids = Auth.auth().currentUser?.uid else {return}
+        Database.database().reference(withPath: "Posts").child(uids).queryOrdered(byChild: "creationDate").observe(.childAdded) { (snapshot) in
+           
+            guard let dict  = snapshot.value as? [String:Any] else {return}
+            let post = PostModel(dict: dict)
+            self.posts.append(post)
+            
+            self.collectionView.reloadData()
+        }
+    }
     //TODO: -handle methods
     
    @objc func handleLogOut()  {
