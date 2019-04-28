@@ -133,7 +133,7 @@ class LoginVC: UIViewController {
         
         if isFormValid {
             loginButton.isEnabled = true
-            loginButton.backgroundColor = UIColor(r: 17, g: 154, b: 237)
+            loginButton.backgroundColor = UIColor.mainBlue()
         }else {
             loginButton.isEnabled = false
             loginButton.backgroundColor = UIColor(r: 149, g: 204, b: 244)

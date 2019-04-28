@@ -12,7 +12,10 @@ import FirebaseAuth
 class UserProfileVC: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     
     fileprivate let cellId = "cellId"
+    fileprivate let homeCellId = "homeCellId"
     fileprivate let headerId = "headerId"
+    var isGridView:Bool = true
+    
     var userUids:String?
     
     var user: UserModel?
@@ -40,13 +43,21 @@ class UserProfileVC: UICollectionViewController, UICollectionViewDelegateFlowLay
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! UserProfileCell
-        let post = posts[indexPath.item]
-        
-        cell.posts = post
-        
-        return cell
-    }
+        if isGridView {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! UserProfileCell
+            let post = posts[indexPath.item]
+            
+            cell.posts = post
+            
+            return cell
+            
+        }else {
+            let homeCell = collectionView.dequeueReusableCell(withReuseIdentifier: homeCellId, for: indexPath) as! HomeCell
+           homeCell.posts = posts[indexPath.item]
+            return homeCell
+            
+        }
+     }
     
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
@@ -60,6 +71,7 @@ class UserProfileVC: UICollectionViewController, UICollectionViewDelegateFlowLay
         String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier:
             headerId, for: indexPath) as! UserProfileHeaderCell
+        header.delgate = self
         header.users = user
         return header
     }
@@ -71,10 +83,18 @@ class UserProfileVC: UICollectionViewController, UICollectionViewDelegateFlowLay
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = (view.frame.width - 4 ) / 3
-        
-        return CGSize(width: width, height: width)
-       
+        if isGridView {
+            let width = (view.frame.width - 4 ) / 3
+            
+            return CGSize(width: width, height: width)
+            
+        }else {
+            var height = view.frame.width + 40 + 16
+            height += 50 // for action buttons
+            height += 90 // for caption posts
+            return .init(width: view.frame.width, height: height)
+        }
+      
     }
     
    
@@ -84,6 +104,7 @@ class UserProfileVC: UICollectionViewController, UICollectionViewDelegateFlowLay
         collectionView.backgroundColor = .white
         
         collectionView.register(UserProfileCell.self, forCellWithReuseIdentifier: cellId)
+        collectionView.register(HomeCell.self, forCellWithReuseIdentifier: homeCellId)
         collectionView.register(UserProfileHeaderCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
     }
     
@@ -153,6 +174,21 @@ class UserProfileVC: UICollectionViewController, UICollectionViewDelegateFlowLay
     alert.addAction(ok)
     alert.addAction(cancel)
     present(alert, animated: true, completion: nil)
+    }
+    
+    
+    
+}
+
+extension UserProfileVC:UserProfileHeaderCellProtocol{
+    func changeToListView() {
+        isGridView = false
+        collectionView.reloadData()
+    }
+    
+    func changeToGridView() {
+        isGridView = true
+        collectionView.reloadData()
     }
     
     

@@ -156,7 +156,7 @@ class RegisterVC: UIViewController {
         
         if isFormValid {
             signUpButton.isEnabled = true
-            signUpButton.backgroundColor = UIColor(r: 17, g: 154, b: 237)
+            signUpButton.backgroundColor = .mainBlue()
         }else {
             signUpButton.isEnabled = false
             signUpButton.backgroundColor = UIColor(r: 149, g: 204, b: 244)

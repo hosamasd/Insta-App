@@ -155,6 +155,16 @@
 			path = Comments;
 			sourceTree = "<group>";
 		};
+		4EC70AAA2275F225002BB8D9 /* user profile */ = {
+			isa = PBXGroup;
+			children = (
+				4E77ADD52270422D00B09397 /* UserProfileVC.swift */,
+				4EA0D36622705ADB00CAF3FD /* UserProfileCell.swift */,
+				4E77ADD72270459E00B09397 /* UserProfileHeaderCell.swift */,
+			);
+			path = "user profile";
+			sourceTree = "<group>";
+		};
 		4EF6B71522702FA700504AE6 = {
 			isa = PBXGroup;
 			children = (
@@ -181,6 +191,7 @@
 				4EFD99CC22743D0700F5D442 /* Home */,
 				4E8A30A522759B8C00BBDB26 /* Camera */,
 				4E8A875022746B26000D46B6 /* Search */,
+				4EC70AAA2275F225002BB8D9 /* user profile */,
 				4EF6B73622702FC300504AE6 /* model */,
 				4EF6B73722702FC900504AE6 /* view */,
 				4EF6B73522702FBA00504AE6 /* controller */,
@@ -200,7 +211,6 @@
 				4E77ADD3227041E500B09397 /* MainTabBarVC.swift */,
 				4E957E22227086DD0042B39E /* PlusVC.swift */,
 				4E957E24227086F50042B39E /* LikeVC.swift */,
-				4E77ADD52270422D00B09397 /* UserProfileVC.swift */,
 				4E957E2622708C920042B39E /* PhotoSelectorVC.swift */,
 				4EFBCDBB2271F6D300BDC669 /* SharePhotoVC.swift */,
 			);
@@ -221,9 +231,7 @@
 			isa = PBXGroup;
 			children = (
 				4E8D694D2274732400460B3A /* BaseCell.swift */,
-				4EA0D36622705ADB00CAF3FD /* UserProfileCell.swift */,
 				4EC646ED2271D81400E58A3C /* PhotoSelectorCell.swift */,
-				4E77ADD72270459E00B09397 /* UserProfileHeaderCell.swift */,
 				4E957E2822708EE30042B39E /* PhotoSelectorHeaderCell.swift */,
 			);
 			path = view;

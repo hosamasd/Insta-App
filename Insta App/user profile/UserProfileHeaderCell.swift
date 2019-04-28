@@ -10,7 +10,14 @@ import UIKit
 import FirebaseAuth
 import FirebaseDatabase
 
+protocol UserProfileHeaderCellProtocol {
+    func changeToListView()
+    func changeToGridView()
+}
+
 class UserProfileHeaderCell: BaseCell {
+    
+    var delgate:UserProfileHeaderCellProtocol?
     
     let profileImage:UIImageView = {
        let im = UIImageView()
@@ -83,16 +90,14 @@ class UserProfileHeaderCell: BaseCell {
     lazy var gridButton:UIButton = {
         let bt  = UIButton()
         bt.setImage(#imageLiteral(resourceName: "grid"), for: .normal)
-        bt.tintColor = UIColor.blue
-//        bt.addTarget(self, action: #selector(handleChangePhoto), for: .touchUpInside)
+        bt.addTarget(self, action: #selector(handleGridView), for: .touchUpInside)
         
         return bt
     }()
     lazy var listButton:UIButton = {
         let bt  = UIButton()
         bt.setImage(#imageLiteral(resourceName: "list"), for: .normal)
-        //        bt.addTarget(self, action: #selector(handleChangePhoto), for: .touchUpInside)
-        bt.tintColor = UIColor(white: 0, alpha: 0.2)
+               bt.addTarget(self, action: #selector(handleListView), for: .touchUpInside)
         return bt
     }()
     lazy var bookmarkButton:UIButton = {
@@ -199,5 +204,18 @@ class UserProfileHeaderCell: BaseCell {
         self.setupUnFollowStyle()
     }
         }
+    }
+    
+    @objc func handleListView(){
+       delgate?.changeToListView()
+        listButton.tintColor = .mainBlue()
+        gridButton.tintColor = UIColor(white: 0, alpha: 0.2)
+    }
+    
+    
+    @objc func handleGridView(){
+       delgate?.changeToGridView()
+        gridButton.tintColor = .mainBlue()
+        listButton.tintColor = UIColor(white: 0, alpha: 0.2)
     }
 }
