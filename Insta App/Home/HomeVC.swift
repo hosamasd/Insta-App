@@ -109,13 +109,24 @@ class HomeVC: UICollectionViewController, UICollectionViewDelegateFlowLayout {
                 
                 var post = PostModel(user: user, dict: dictionary)
                 post.id = key
-                self.posts.append(post)
                 
-                self.posts.sort(by: { (p1, p2) -> Bool in
-                    return p1.creationDate.compare(p2.creationDate) == .orderedDescending
+                guard let uids = Auth.auth().currentUser?.uid else {return}
+                Database.database().reference(withPath: "Likes").child(key).child(uids).observeSingleEvent(of: .value, with: { (snapshot) in
+                    if let val = snapshot.value as? Int , val == 1{
+                        post.hasLiked = true
+                    }else {
+                        post.hasLiked = false
+                    }
+                    self.posts.append(post)
+                    
+                    self.posts.sort(by: { (p1, p2) -> Bool in
+                        return p1.creationDate.compare(p2.creationDate) == .orderedDescending
+                    })
+                    self.collectionView?.reloadData()
+                    
                 })
-                self.collectionView?.reloadData()
-            })
+                
+           })
         }
     }
     
@@ -147,6 +158,25 @@ class HomeVC: UICollectionViewController, UICollectionViewDelegateFlowLayout {
 }
 
 extension HomeVC:HomeCellProtocol {
+    func didLike(for cell: HomeCell) {
+        guard  let index = collectionView.indexPath(for: cell) else {return}
+        guard let uid = Auth.auth().currentUser?.uid else { return  }
+        
+        var post = posts[index.item]
+        guard let ids = post.id else { return }
+        let values:[String:Any] = [uid: post.hasLiked == false ? 1 : 0]
+        
+        Database.database().reference(withPath: "Likes").child(ids).updateChildValues(values) { (err, _) in
+            if err == nil {
+                
+                post.hasLiked = !post.hasLiked
+                self.posts[index.item] = post
+                self.collectionView.reloadItems(at: [index])
+                
+            }
+        }
+    }
+    
     func didTapPost(post: PostModel) {
         let comment = CommentVC(collectionViewLayout: UICollectionViewFlowLayout())
         comment.posts = post

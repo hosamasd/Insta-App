@@ -181,7 +181,6 @@
 				4EFD99CC22743D0700F5D442 /* Home */,
 				4E8A30A522759B8C00BBDB26 /* Camera */,
 				4E8A875022746B26000D46B6 /* Search */,
-				4EC6E4DC2275C0CF00E54780 /* Comments */,
 				4EF6B73622702FC300504AE6 /* model */,
 				4EF6B73722702FC900504AE6 /* view */,
 				4EF6B73522702FBA00504AE6 /* controller */,
@@ -235,6 +234,7 @@
 			children = (
 				4EFD99C8227439FC00F5D442 /* HomeVC.swift */,
 				4EFD99CA22743A4B00F5D442 /* HomeCell.swift */,
+				4EC6E4DC2275C0CF00E54780 /* Comments */,
 			);
 			path = Home;
 			sourceTree = "<group>";

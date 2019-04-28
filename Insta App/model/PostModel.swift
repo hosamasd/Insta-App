@@ -15,6 +15,7 @@ struct PostModel {
     let caption:String
     let user:UserModel
     let creationDate:Date
+    var hasLiked:Bool = false
     
     init(user:UserModel,dict: [String:Any]) {
         self.imageUrl = dict["image-url"] as? String ?? ""

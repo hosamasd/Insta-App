@@ -10,6 +10,7 @@ import UIKit
 
 protocol HomeCellProtocol {
     func didTapPost(post:PostModel)
+    func didLike(for cell:HomeCell)
 }
 
 class HomeCell: UICollectionViewCell {
@@ -21,7 +22,8 @@ class HomeCell: UICollectionViewCell {
       self.mainImage.loadImageUsingCacheWithUrlString(post.imageUrl)
             self.userNameLabel.text = post.user.username
             self.profileImage.loadImageUsingCacheWithUrlString(post.user.imageUrl)
-            
+            let selected = post.hasLiked ? #imageLiteral(resourceName: "like_selected").withRenderingMode(.alwaysOriginal) : #imageLiteral(resourceName: "like_unselected").withRenderingMode(.alwaysOriginal)
+            self.likeButton.setImage(selected, for: .normal)
             let attributeText = NSMutableAttributedString(string: "\(post.user.username): ", attributes:  [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 14)])
             attributeText.append(NSAttributedString(string: "\(post.caption)", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14)]))
             attributeText.append(NSAttributedString(string: "\n", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 4)]))
@@ -63,7 +65,7 @@ class HomeCell: UICollectionViewCell {
         let bt  = UIButton()
         bt.setImage(#imageLiteral(resourceName: "like_unselected"), for: .normal)
         bt.tintColor = UIColor.blue
-        //        bt.addTarget(self, action: #selector(handleChangePhoto), for: .touchUpInside)
+               bt.addTarget(self, action: #selector(handleLike), for: .touchUpInside)
         
         return bt
     }()
@@ -147,5 +149,9 @@ class HomeCell: UICollectionViewCell {
   @objc  func handleComment()  {
         guard let post = self.posts else { return  }
     delgate?.didTapPost(post: post)
+    }
+    
+    @objc func handleLike(){
+        delgate?.didLike(for: self)
     }
 }
