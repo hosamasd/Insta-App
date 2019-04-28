@@ -114,29 +114,52 @@ class UserProfileVC: UICollectionViewController, UICollectionViewDelegateFlowLay
         Database.database().loadUserInfo(uid: uids) { (user) in
             self.user = user
             self.navigationItem.title =  user.username
-            self.fetchOrderdPostes()
+//            self.fetchOrderdPostes()
+            self.paginatePosts()
         }
         
         
     }
     
-    func fetchPosts()  {
-        guard  let uids = Auth.auth().currentUser?.uid  else {return}
-        Database.database().reference(withPath: "Posts").child(uids).observeSingleEvent(of: .value) { (sanpshot) in
-            guard let dictionaries = sanpshot.value as?[String:Any] else {return}
-            
-            dictionaries.forEach({ (key,value) in
+    func paginatePosts()  {
+        
+        guard let uids = self.user?.uid else {return}
+       let ref =  Database.database().reference(withPath: "Posts").child(uids)
+        let value = "-LdK167IUMkXpJyNFkNw"
+        
+//        let query = ref.queryOrderedByKey().queryStarting(atValue: value).queryLimited(toFirst: 6)
+        let query = ref.queryOrderedByKey().queryLimited(toFirst: 6)
+        query.observeSingleEvent(of: .value) { (snapshot) in
+            let allOjects = snapshot.children.allObjects as?[DataSnapshot]
+             guard let user = self.user  else {return}
+            allOjects?.forEach({ (snap) in
                
-                guard let dict = value as?[String:Any] else {return}
-                 guard let user = self.user  else {return}
+                
+                guard let dict = snap.value as?[String:Any] else {return}
+                
                 let post = PostModel(user: user, dict: dict)
-                self.posts.append(post)
+                                self.posts.append(post)
             })
-            
-            self.collectionView.reloadData()
+         self.collectionView.reloadData()
         }
-
     }
+//    func fetchPosts()  {
+//        guard  let uids = Auth.auth().currentUser?.uid  else {return}
+//        Database.database().reference(withPath: "Posts").child(uids).observeSingleEvent(of: .value) { (sanpshot) in
+//            guard let dictionaries = sanpshot.value as?[String:Any] else {return}
+//
+//            dictionaries.forEach({ (key,value) in
+//
+//                guard let dict = value as?[String:Any] else {return}
+//                 guard let user = self.user  else {return}
+//                let post = PostModel(user: user, dict: dict)
+//                self.posts.append(post)
+//            })
+//
+//            self.collectionView.reloadData()
+//        }
+//
+//    }
     
     func fetchOrderdPostes()  {
         posts.removeAll()
@@ -146,7 +169,7 @@ class UserProfileVC: UICollectionViewController, UICollectionViewDelegateFlowLay
             guard let dict  = snapshot.value as? [String:Any] else {return}
              guard let user = self.user else {return}
             let post = PostModel(user: user, dict: dict)
-            self.posts.append(post)
+            self.posts.insert(post, at: 0)
             
             self.collectionView.reloadData()
         }
