@@ -16,19 +16,23 @@ class HomeVC: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     var posts = [PostModel]()
     var users:UserModel?
     
+   
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        //listen to notifcaastion and do some code
+        NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateFeeds), name: SharePhotoVC.updateFeedNotificationName, object: nil)
         
-        let logoImage = UIImageView(image: #imageLiteral(resourceName: "Instagram_logo_white"))
-        logoImage.tintColor = UIColor.black
-        navigationItem.titleView = logoImage
+        setupNavigation()
+        
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(handleRefreshControl), for: .valueChanged)
+        collectionView.refreshControl = refreshControl
         
         collectionView.backgroundColor = .white
         collectionView.register(HomeCell.self, forCellWithReuseIdentifier: cellId)
         
-        fetchUser()
-        
-        fetchFollowingPosts()
+         fetchAllPosts()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -69,6 +73,7 @@ class HomeVC: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     func fetchFollowingPosts()  {
         guard let uids = Auth.auth().currentUser?.uid else { return  }
         Database.database().reference(withPath: "Following").child(uids).observeSingleEvent(of: .value) { (snapshot) in
+            self.collectionView.refreshControl?.endRefreshing()
             guard let uidsDict = snapshot.value as? [String: Any] else { return  }
 
             uidsDict.forEach({ (key,value) in
@@ -107,4 +112,29 @@ class HomeVC: UICollectionViewController, UICollectionViewDelegateFlowLayout {
         }
     }
     
+    fileprivate func fetchAllPosts() {
+        fetchUser()
+        fetchFollowingPosts()
+    }
+    fileprivate func setupNavigation() {
+        let logoImage = UIImageView(image: #imageLiteral(resourceName: "Instagram_logo_white"))
+        logoImage.tintColor = UIColor.black
+        navigationItem.titleView = logoImage
+        
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "camera3"), style: .plain, target: self, action: #selector(handleCamera))
+    }
+    
+    @objc func handleRefreshControl()  {
+        posts.removeAll()
+        fetchAllPosts()
+    }
+    
+    @objc func handleUpdateFeeds(){
+        handleRefreshControl()
+    }
+    
+    @objc func handleCamera(){
+        let camera = CameraVC()
+        present(camera, animated: true, completion: nil)
+    }
 }

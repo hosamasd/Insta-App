@@ -12,6 +12,9 @@ import Firebase
 
 class SharePhotoVC: UIViewController {
     
+    static let updateFeedNotificationName = NSNotification.Name("updateFeed")
+
+    
     var selectedImage:UIImage? {
         didSet{
         self.shareImage.image = selectedImage
@@ -83,7 +86,8 @@ class SharePhotoVC: UIViewController {
                 print(err?.localizedDescription)
                 self.navigationItem.rightBarButtonItem?.isEnabled = true
             }
-            
+            //make notification to listen the operation of dismiss
+            NotificationCenter.default.post(name: SharePhotoVC.updateFeedNotificationName, object: nil)
             self.dismiss(animated: true, completion: nil)
         })
     }
