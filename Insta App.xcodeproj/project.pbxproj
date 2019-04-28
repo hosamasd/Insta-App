@@ -26,8 +26,11 @@
 		4EA0D36922705F5000CAF3FD /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA0D36822705F5000CAF3FD /* LoginVC.swift */; };
 		4EC2D3852275841700E6D250 /* CameraVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC2D3842275841700E6D250 /* CameraVC.swift */; };
 		4EC646EE2271D81400E58A3C /* PhotoSelectorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC646ED2271D81400E58A3C /* PhotoSelectorCell.swift */; };
+		4EC6E4DE2275C0ED00E54780 /* CommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC6E4DD2275C0ED00E54780 /* CommentCell.swift */; };
+		4EC6E4E02275C1C400E54780 /* CommentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC6E4DF2275C1C400E54780 /* CommentModel.swift */; };
 		4ED09DE82271B32200025445 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED09DE72271B32200025445 /* UserModel.swift */; };
 		4ED09DEA2271B46A00025445 /* ImageCaching.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED09DE92271B46A00025445 /* ImageCaching.swift */; };
+		4ED3C0CA2275A5C7007E2106 /* CommentVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED3C0C92275A5C7007E2106 /* CommentVC.swift */; };
 		4EE344D72274265200B4734F /* PostModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE344D62274265200B4734F /* PostModel.swift */; };
 		4EF6B72222702FA700504AE6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EF6B72122702FA700504AE6 /* AppDelegate.swift */; };
 		4EF6B72422702FA700504AE6 /* RegisterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EF6B72322702FA700504AE6 /* RegisterVC.swift */; };
@@ -64,8 +67,11 @@
 		4EA0D36822705F5000CAF3FD /* LoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
 		4EC2D3842275841700E6D250 /* CameraVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraVC.swift; sourceTree = "<group>"; };
 		4EC646ED2271D81400E58A3C /* PhotoSelectorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSelectorCell.swift; sourceTree = "<group>"; };
+		4EC6E4DD2275C0ED00E54780 /* CommentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentCell.swift; sourceTree = "<group>"; };
+		4EC6E4DF2275C1C400E54780 /* CommentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentModel.swift; sourceTree = "<group>"; };
 		4ED09DE72271B32200025445 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		4ED09DE92271B46A00025445 /* ImageCaching.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCaching.swift; sourceTree = "<group>"; };
+		4ED3C0C92275A5C7007E2106 /* CommentVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentVC.swift; sourceTree = "<group>"; };
 		4EE344D62274265200B4734F /* PostModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostModel.swift; sourceTree = "<group>"; };
 		4EF6B71E22702FA700504AE6 /* Insta App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Insta App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4EF6B72122702FA700504AE6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -136,9 +142,17 @@
 			children = (
 				4EF6B72322702FA700504AE6 /* RegisterVC.swift */,
 				4EA0D36822705F5000CAF3FD /* LoginVC.swift */,
-				4EFD99CC22743D0700F5D442 /* Home */,
 			);
 			path = "login&registerVC";
+			sourceTree = "<group>";
+		};
+		4EC6E4DC2275C0CF00E54780 /* Comments */ = {
+			isa = PBXGroup;
+			children = (
+				4ED3C0C92275A5C7007E2106 /* CommentVC.swift */,
+				4EC6E4DD2275C0ED00E54780 /* CommentCell.swift */,
+			);
+			path = Comments;
 			sourceTree = "<group>";
 		};
 		4EF6B71522702FA700504AE6 = {
@@ -164,7 +178,10 @@
 			children = (
 				4EF6B72122702FA700504AE6 /* AppDelegate.swift */,
 				4E9F9ADD227072950033A47A /* login&registerVC */,
+				4EFD99CC22743D0700F5D442 /* Home */,
+				4E8A30A522759B8C00BBDB26 /* Camera */,
 				4E8A875022746B26000D46B6 /* Search */,
+				4EC6E4DC2275C0CF00E54780 /* Comments */,
 				4EF6B73622702FC300504AE6 /* model */,
 				4EF6B73722702FC900504AE6 /* view */,
 				4EF6B73522702FBA00504AE6 /* controller */,
@@ -187,7 +204,6 @@
 				4E77ADD52270422D00B09397 /* UserProfileVC.swift */,
 				4E957E2622708C920042B39E /* PhotoSelectorVC.swift */,
 				4EFBCDBB2271F6D300BDC669 /* SharePhotoVC.swift */,
-				4E8A30A522759B8C00BBDB26 /* Camera */,
 			);
 			path = controller;
 			sourceTree = "<group>";
@@ -197,6 +213,7 @@
 			children = (
 				4ED09DE72271B32200025445 /* UserModel.swift */,
 				4EE344D62274265200B4734F /* PostModel.swift */,
+				4EC6E4DF2275C1C400E54780 /* CommentModel.swift */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -364,6 +381,7 @@
 				4EA0D36722705ADB00CAF3FD /* UserProfileCell.swift in Sources */,
 				4E957E25227086F50042B39E /* LikeVC.swift in Sources */,
 				4E8A874F227464EB000D46B6 /* UserDatabase.swift in Sources */,
+				4EC6E4E02275C1C400E54780 /* CommentModel.swift in Sources */,
 				4E957E2722708C920042B39E /* PhotoSelectorVC.swift in Sources */,
 				4EF6B72222702FA700504AE6 /* AppDelegate.swift in Sources */,
 				4E957E2922708EE30042B39E /* PhotoSelectorHeaderCell.swift in Sources */,
@@ -380,9 +398,11 @@
 				4EC2D3852275841700E6D250 /* CameraVC.swift in Sources */,
 				4E77ADD4227041E500B09397 /* MainTabBarVC.swift in Sources */,
 				4EFD99C9227439FC00F5D442 /* HomeVC.swift in Sources */,
+				4EC6E4DE2275C0ED00E54780 /* CommentCell.swift in Sources */,
 				4E8A30A922759BCE00BBDB26 /* CustomAnimationDismisser.swift in Sources */,
 				4EFBCDBC2271F6D300BDC669 /* SharePhotoVC.swift in Sources */,
 				4E8A875422746B6E000D46B6 /* SearchCell.swift in Sources */,
+				4ED3C0CA2275A5C7007E2106 /* CommentVC.swift in Sources */,
 				4E8A30AB22759C3C00BBDB26 /* PreviewPhotoContainerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

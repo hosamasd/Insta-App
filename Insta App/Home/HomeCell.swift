@@ -8,7 +8,13 @@
 
 import UIKit
 
+protocol HomeCellProtocol {
+    func didTapPost(post:PostModel)
+}
+
 class HomeCell: UICollectionViewCell {
+    var delgate:HomeCellProtocol?
+    
     var posts:PostModel? {
         didSet{
             guard let post = posts else { return  }
@@ -64,7 +70,7 @@ class HomeCell: UICollectionViewCell {
     lazy var commentButton:UIButton = {
         let bt  = UIButton()
         bt.setImage(#imageLiteral(resourceName: "comment"), for: .normal)
-        //        bt.addTarget(self, action: #selector(handleChangePhoto), for: .touchUpInside)
+              bt.addTarget(self, action: #selector(handleComment), for: .touchUpInside)
         bt.tintColor = UIColor(white: 0, alpha: 0.2)
         return bt
     }()
@@ -136,5 +142,10 @@ class HomeCell: UICollectionViewCell {
    
    @objc func handleMoreOption()  {
         print(123)
+    }
+    
+  @objc  func handleComment()  {
+        guard let post = self.posts else { return  }
+    delgate?.didTapPost(post: post)
     }
 }

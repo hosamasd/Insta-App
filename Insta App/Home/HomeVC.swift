@@ -16,7 +16,7 @@ class HomeVC: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     var posts = [PostModel]()
     var users:UserModel?
     
-   
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,15 +32,15 @@ class HomeVC: UICollectionViewController, UICollectionViewDelegateFlowLayout {
         collectionView.backgroundColor = .white
         collectionView.register(HomeCell.self, forCellWithReuseIdentifier: cellId)
         
-         fetchAllPosts()
+        fetchAllPosts()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-//        fetchUser()
-//
-//        fetchFollowingPosts()
+        //        fetchUser()
+        //
+        //        fetchFollowingPosts()
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -51,6 +51,7 @@ class HomeVC: UICollectionViewController, UICollectionViewDelegateFlowLayout {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! HomeCell
         let post = posts[indexPath.item]
         
+        cell.delgate = self
         cell.posts = post
         return cell
     }
@@ -73,14 +74,14 @@ class HomeVC: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     func fetchFollowingPosts()  {
         guard let uids = Auth.auth().currentUser?.uid else { return  }
         Database.database().reference(withPath: "Following").child(uids).observeSingleEvent(of: .value) { (snapshot) in
-            self.collectionView.refreshControl?.endRefreshing()
+            
             guard let uidsDict = snapshot.value as? [String: Any] else { return  }
-
+            
             uidsDict.forEach({ (key,value) in
                 Database.database().loadUserInfo(uid: key, completion: { (user) in
-                     self.fetchOrderdPostes(uid: key, user: user)
+                    self.fetchOrderdPostes(uid: key, user: user,id:key)
                 })
-               
+                
             })
         }
     }
@@ -93,22 +94,28 @@ class HomeVC: UICollectionViewController, UICollectionViewDelegateFlowLayout {
             self.fetchOrderdPostes(uid: uids, user: user)
         }
         
-           
+        
         
         
     }
     
-    func fetchOrderdPostes(uid:String,user:UserModel)  {
-//        posts.removeAll()
+    func fetchOrderdPostes(uid:String,user:UserModel,id:String? = nil)  {
         
-         Database.database().reference(withPath: "Posts").child(uid).queryOrdered(byChild: "creationDate").observe(.childAdded) { (snapshot) in
-            
-            guard let dict  = snapshot.value as? [String:Any] else {return}
-            
-            let post = PostModel(user: user, dict: dict)
-            self.posts.append(post)
-            
-            self.collectionView.reloadData()
+        Database.database().reference(withPath: "Posts").child(user.uid).observeSingleEvent(of: .value) { (snapshot) in
+            self.collectionView.refreshControl?.endRefreshing()
+            guard let dictionaries = snapshot.value as? [String: Any] else { return }
+            dictionaries.forEach({ (key,value) in
+                guard let dictionary = value as? [String: Any] else { return }
+                
+                var post = PostModel(user: user, dict: dictionary)
+                post.id = key
+                self.posts.append(post)
+                
+                self.posts.sort(by: { (p1, p2) -> Bool in
+                    return p1.creationDate.compare(p2.creationDate) == .orderedDescending
+                })
+                self.collectionView?.reloadData()
+            })
         }
     }
     
@@ -137,4 +144,15 @@ class HomeVC: UICollectionViewController, UICollectionViewDelegateFlowLayout {
         let camera = CameraVC()
         present(camera, animated: true, completion: nil)
     }
+}
+
+extension HomeVC:HomeCellProtocol {
+    func didTapPost(post: PostModel) {
+        let comment = CommentVC(collectionViewLayout: UICollectionViewFlowLayout())
+        comment.posts = post
+        navigationController?.pushViewController(comment, animated: true)
+        
+    }
+    
+    
 }
