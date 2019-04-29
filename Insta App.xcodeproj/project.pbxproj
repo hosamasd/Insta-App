@@ -7,9 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4E5F283E22771E8B00A25A21 /* ContainerTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E5F283D22771E8B00A25A21 /* ContainerTextView.swift */; };
 		4E77ADD4227041E500B09397 /* MainTabBarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E77ADD3227041E500B09397 /* MainTabBarVC.swift */; };
 		4E77ADD62270422D00B09397 /* UserProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E77ADD52270422D00B09397 /* UserProfileVC.swift */; };
 		4E77ADD82270459E00B09397 /* UserProfileHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E77ADD72270459E00B09397 /* UserProfileHeaderCell.swift */; };
+		4E7D84DF22770E7700F4704A /* CommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7D84DE22770E7700F4704A /* CommentView.swift */; };
 		4E8A30A722759B9D00BBDB26 /* CustomAnimationPresentor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8A30A622759B9D00BBDB26 /* CustomAnimationPresentor.swift */; };
 		4E8A30A922759BCE00BBDB26 /* CustomAnimationDismisser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8A30A822759BCE00BBDB26 /* CustomAnimationDismisser.swift */; };
 		4E8A30AB22759C3C00BBDB26 /* PreviewPhotoContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8A30AA22759C3C00BBDB26 /* PreviewPhotoContainerView.swift */; };
@@ -48,9 +50,11 @@
 		0952FE2DF84E1F358B9BFFB8 /* Pods-Insta App.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Insta App.release.xcconfig"; path = "Target Support Files/Pods-Insta App/Pods-Insta App.release.xcconfig"; sourceTree = "<group>"; };
 		3DAD0B522AE84416C38FF89A /* Pods-Insta App.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Insta App.debug.xcconfig"; path = "Target Support Files/Pods-Insta App/Pods-Insta App.debug.xcconfig"; sourceTree = "<group>"; };
 		3DB1CD3D05262F7822E5A200 /* Pods_Insta_App.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Insta_App.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4E5F283D22771E8B00A25A21 /* ContainerTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerTextView.swift; sourceTree = "<group>"; };
 		4E77ADD3227041E500B09397 /* MainTabBarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarVC.swift; sourceTree = "<group>"; };
 		4E77ADD52270422D00B09397 /* UserProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileVC.swift; sourceTree = "<group>"; };
 		4E77ADD72270459E00B09397 /* UserProfileHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileHeaderCell.swift; sourceTree = "<group>"; };
+		4E7D84DE22770E7700F4704A /* CommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentView.swift; sourceTree = "<group>"; };
 		4E8A30A622759B9D00BBDB26 /* CustomAnimationPresentor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAnimationPresentor.swift; sourceTree = "<group>"; };
 		4E8A30A822759BCE00BBDB26 /* CustomAnimationDismisser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAnimationDismisser.swift; sourceTree = "<group>"; };
 		4E8A30AA22759C3C00BBDB26 /* PreviewPhotoContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewPhotoContainerView.swift; sourceTree = "<group>"; };
@@ -151,6 +155,8 @@
 			children = (
 				4ED3C0C92275A5C7007E2106 /* CommentVC.swift */,
 				4EC6E4DD2275C0ED00E54780 /* CommentCell.swift */,
+				4E7D84DE22770E7700F4704A /* CommentView.swift */,
+				4E5F283D22771E8B00A25A21 /* ContainerTextView.swift */,
 			);
 			path = Comments;
 			sourceTree = "<group>";
@@ -389,6 +395,7 @@
 				4EA0D36722705ADB00CAF3FD /* UserProfileCell.swift in Sources */,
 				4E957E25227086F50042B39E /* LikeVC.swift in Sources */,
 				4E8A874F227464EB000D46B6 /* UserDatabase.swift in Sources */,
+				4E7D84DF22770E7700F4704A /* CommentView.swift in Sources */,
 				4EC6E4E02275C1C400E54780 /* CommentModel.swift in Sources */,
 				4E957E2722708C920042B39E /* PhotoSelectorVC.swift in Sources */,
 				4EF6B72222702FA700504AE6 /* AppDelegate.swift in Sources */,
@@ -402,6 +409,7 @@
 				4EE344D72274265200B4734F /* PostModel.swift in Sources */,
 				4EFD99CB22743A4B00F5D442 /* HomeCell.swift in Sources */,
 				4EC646EE2271D81400E58A3C /* PhotoSelectorCell.swift in Sources */,
+				4E5F283E22771E8B00A25A21 /* ContainerTextView.swift in Sources */,
 				4ED09DE82271B32200025445 /* UserModel.swift in Sources */,
 				4EC2D3852275841700E6D250 /* CameraVC.swift in Sources */,
 				4E77ADD4227041E500B09397 /* MainTabBarVC.swift in Sources */,

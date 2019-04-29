@@ -15,45 +15,24 @@ class CommentVC: UICollectionViewController, UICollectionViewDelegateFlowLayout 
     var commentArray:[CommentModel] = []
     
     fileprivate let cellId = "cellId"
-    let textChat:UITextField = { 
-     let tx =    UITextField()
+    let textChat:UITextField = {
+        let tx =    UITextField()
         tx.placeholder = "Enter your comment"
         return tx
     }()
-    lazy var containerView:UIView = {
-        let chatView = UIView()
-        chatView.backgroundColor = .white
-        chatView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 50)
-        
-        
-        chatView.addSubview(textChat)
-        textChat.anchor(top: chatView.topAnchor, leading: chatView.leadingAnchor, bottom: chatView.bottomAnchor, trailing: nil,padding: .init(top: 0, left: 8, bottom: 0, right: 0))
-        
-        var sendButton = UIButton()
-        sendButton.setTitle("Send", for: .normal)
-        sendButton.setTitleColor(.black, for: .normal)
-        sendButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
-        sendButton.addTarget(self, action: #selector(handleSend), for: .touchUpInside)
-        chatView.addSubview(sendButton)
-        sendButton.anchor(top: chatView.topAnchor, leading: textChat.trailingAnchor, bottom: chatView.bottomAnchor, trailing: chatView.trailingAnchor,padding: .init(top: 0, left: 0, bottom: 0, right: 8),size: .init(width: 50, height: 0))
-        
-        let lineSeparatorView = UIView()
-        lineSeparatorView.backgroundColor = UIColor(r: 230, g: 230, b: 230)
-        chatView.addSubview(lineSeparatorView)
-        lineSeparatorView.anchor(top: chatView.topAnchor, leading: chatView.leadingAnchor ,bottom: nil, trailing: chatView.trailingAnchor,padding: .init(top: 0, left: 0, bottom: 0, right: 0),size: .init(width: 0, height: 0.5))
-        
+    lazy var containerView:CommentView = {
+        let frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 50)
+        let chatView = CommentView(frame: frame)
+        chatView.delgate = self
         return chatView
     }()
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "Comments"
-        collectionView.backgroundColor = .white
-        collectionView?.alwaysBounceVertical = true
-        collectionView?.keyboardDismissMode = .interactive
-        collectionView.contentInset = UIEdgeInsets(top: 10, left: 0, bottom: -50, right: 0)
-        collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: -50, right: 0)
-        collectionView.register(CommentCell.self, forCellWithReuseIdentifier: cellId)
+        setupCollectionView()
         
         fetchComments()
     }
@@ -61,7 +40,7 @@ class CommentVC: UICollectionViewController, UICollectionViewDelegateFlowLayout 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tabBarController?.tabBar.isHidden = true
-
+        
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -101,21 +80,13 @@ class CommentVC: UICollectionViewController, UICollectionViewDelegateFlowLayout 
         return .init(width: view.frame.width, height: height)
     }
     
-    
-    @objc func handleSend(){
-       guard let text = textChat.text else { return  }
-        guard let uids = Auth.auth().currentUser?.uid else { return  }
-        let ids = posts?.id ?? ""
-        
-        let values:[String : Any] = ["text": text,"postId":ids,"uid":uids,"creationDate":Date().timeIntervalSince1970]
-        
-        Database.database().reference(withPath: "Comments").child(uids).childByAutoId().updateChildValues(values) { (err, ref) in
-            if err == nil {
-                print("sent")
-            }
-        }
-        
-       textChat.text = ""
+    fileprivate func setupCollectionView() {
+        collectionView.backgroundColor = .white
+        collectionView?.alwaysBounceVertical = true
+        collectionView?.keyboardDismissMode = .onDrag
+        collectionView.contentInset = UIEdgeInsets(top: 10, left: 0, bottom: -50, right: 0)
+        collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: -50, right: 0)
+        collectionView.register(CommentCell.self, forCellWithReuseIdentifier: cellId)
     }
     
     func fetchComments()  {
@@ -123,7 +94,7 @@ class CommentVC: UICollectionViewController, UICollectionViewDelegateFlowLayout 
         guard let uid = Auth.auth().currentUser?.uid else { return  }
         Database.database().reference(withPath: "Comments").child(uid).observe(.childAdded) { (snapshot) in
             guard let dict = snapshot.value as?[String:Any] else {return}
-              guard let uid = dict["uid"] as? String  else {return}
+            guard let uid = dict["uid"] as? String  else {return}
             
             Database.database().loadUserInfo(uid: uid, completion: { (user) in
                 let comment = CommentModel(user: user, dict: dict)
@@ -133,6 +104,25 @@ class CommentVC: UICollectionViewController, UICollectionViewDelegateFlowLayout 
                 }
             })
             
-         }
+        }
     }
+}
+
+extension CommentVC: CommentViewDelgate {
+    
+    func didWriteComment(for comment: String) {
+        guard let uids = Auth.auth().currentUser?.uid else { return  }
+        let ids = posts?.id ?? ""
+        
+        let values:[String : Any] = ["text": comment,"postId":ids,"uid":uids,"creationDate":Date().timeIntervalSince1970]
+        
+        Database.database().reference(withPath: "Comments").child(uids).childByAutoId().updateChildValues(values) { (err, ref) in
+            if err == nil {
+                self.containerView.clearText()
+            }
+        }
+        
+    }
+    
+    
 }
