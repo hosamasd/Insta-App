@@ -130,12 +130,8 @@ class UserProfileVC: UICollectionViewController, UICollectionViewDelegateFlowLay
         let ref =  Database.database().reference(withPath: "Posts").child(uids)
         
         //        let query = ref.queryOrderedByKey().queryStarting(atValue: value).queryLimited(toFirst: 6)
-        var query = ref.queryOrdered(byChild: "creationDate")
-        if self.posts.count > 0 {
-            let val = self.posts.last?.creationDate.timeIntervalSince1970
-            query.queryStarting(atValue: val)
-        }
-        query.queryLimited(toLast: 4).observeSingleEvent(of: .value) { (snapshot) in
+        var query = ref.queryOrderedByKey()
+       query.queryLimited(toLast: 4).observeSingleEvent(of: .value) { (snapshot) in
             guard var  allOjects = snapshot.children.allObjects as?[DataSnapshot] else {return}
             
             allOjects.reverse()
@@ -176,12 +172,11 @@ class UserProfileVC: UICollectionViewController, UICollectionViewDelegateFlowLay
             self.collectionView.reloadData()
         }
     }
-    //TODO: -handle methods
     
-    @objc func handleLogOut()  {
-        let alert = UIAlertController(title: "sign out?", message: "Are you sure do you want to sign out?", preferredStyle: .actionSheet)
-        let cancel = UIAlertAction(title: "Cancel", style: .default, handler: nil)
-        let ok  = UIAlertAction(title: "Sign out", style: .destructive) { (tex) in
+    func createAlert(title:String, message: String)  {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let action = UIAlertAction(title: "Cancel", style: .default, handler: nil)
+        let logOut = UIAlertAction(title: "Sign Out", style: .destructive) { (signOut) in
             do{
                 try Auth.auth().signOut()
                 
@@ -193,11 +188,19 @@ class UserProfileVC: UICollectionViewController, UICollectionViewDelegateFlowLay
             }catch let err {
                 print(err.localizedDescription)
             }
-            
         }
-        alert.addAction(ok)
-        alert.addAction(cancel)
+        
+        alert.addAction(action)
+        alert.addAction(logOut)
         present(alert, animated: true, completion: nil)
+        
+    }
+    
+    //TODO: -handle methods
+    
+    @objc func handleLogOut()  {
+    
+        createAlert(title: "Sign Out", message: "Are you sure do you want to sign out?")
     }
     
     

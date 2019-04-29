@@ -13,14 +13,12 @@ class LoginVC: UIViewController {
     let mainView:UIView = {
         let mv = UIView()
         mv.backgroundColor = UIColor(r: 0, g: 120, b: 175)
-        
         return mv
     }()
     
     let  mainImageLogo:UIImageView = {
         let bt  = UIImageView(image: #imageLiteral(resourceName: "Instagram_logo_white"))
         bt.contentMode = .scaleAspectFill
-        
         return bt
     }()
     lazy var signUpButton:UIButton = {
@@ -85,11 +83,7 @@ class LoginVC: UIViewController {
     func setupViews()  {
         let stacks = getStacks(view: emailTextField,passwordTextField, axis: .vertical)
         
-        
-        view.addSubview(mainView)
-        view.addSubview(signUpButton)
-        view.addSubview(stacks)
-        view.addSubview(loginButton)
+        addViews(mainView,signUpButton,stacks,loginButton)
         mainView.addSubview(mainImageLogo)
         
         mainView.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor,padding: .init(top: 0, left: 0, bottom: 0, right: 0),size: .init(width: 0, height: 150))
@@ -100,6 +94,22 @@ class LoginVC: UIViewController {
         stacks.anchor(top: mainView.bottomAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor,padding: .init(top: 50, left: 40, bottom: 0, right: 40),size: .init(width: 0, height: 120))
         loginButton.anchor(top: stacks.bottomAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor,padding: .init(top: 20, left: 40, bottom: 0, right: 40),size: .init(width: 0, height: 50))
         signUpButton.anchor(top: nil, leading: view.leadingAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor ,trailing: view.trailingAnchor,padding: .init(top: 0, left: 32, bottom: 8, right: 32),size: .init(width: 0, height: 30))
+        
+    }
+    
+    //MARK: - user methods
+    
+    func addViews(_ views: UIView...)  {
+        view.backgroundColor = .white
+        views.forEach({view.addSubview($0)})
+    }
+    
+    func createAlert(title:String, message: String)  {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let action = UIAlertAction(title: "Ok", style: .default, handler: nil)
+        
+        alert.addAction(action)
+        present(alert, animated: true, completion: nil)
         
     }
     
@@ -119,13 +129,9 @@ class LoginVC: UIViewController {
                 
                 self.dismiss(animated: true, completion: nil)
             }else {
-                print("errored")
+                self.createAlert(title: "Error happened!", message: "there is an problem \n \(err?.localizedDescription)")
             }
         }
-        
-        
-        
-        
     }
     
     @objc func handleTextChange(){

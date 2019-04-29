@@ -35,13 +35,7 @@ class HomeVC: UICollectionViewController, UICollectionViewDelegateFlowLayout {
         fetchAllPosts()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        //        fetchUser()
-        //
-        //        fetchFollowingPosts()
-    }
+    //MARK: -  collectionView data source
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return posts.count
@@ -55,6 +49,8 @@ class HomeVC: UICollectionViewController, UICollectionViewDelegateFlowLayout {
         cell.posts = post
         return cell
     }
+    
+    //MARK: -  collectionViewLayoutdelgate
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         var height = view.frame.width + 40 + 16
@@ -71,6 +67,8 @@ class HomeVC: UICollectionViewController, UICollectionViewDelegateFlowLayout {
         return 2
     }
     
+    //MARK: -  user methods
+    
     func fetchFollowingPosts()  {
         guard let uids = Auth.auth().currentUser?.uid else { return  }
         Database.database().reference(withPath: "Following").child(uids).observeSingleEvent(of: .value) { (snapshot) in
@@ -81,7 +79,6 @@ class HomeVC: UICollectionViewController, UICollectionViewDelegateFlowLayout {
                 Database.database().loadUserInfo(uid: key, completion: { (user) in
                     self.fetchOrderdPostes(uid: key, user: user,id:key)
                 })
-                
             })
         }
     }
@@ -93,10 +90,6 @@ class HomeVC: UICollectionViewController, UICollectionViewDelegateFlowLayout {
             
             self.fetchOrderdPostes(uid: uids, user: user)
         }
-        
-        
-        
-        
     }
     
     func fetchOrderdPostes(uid:String,user:UserModel,id:String? = nil)  {
@@ -123,25 +116,57 @@ class HomeVC: UICollectionViewController, UICollectionViewDelegateFlowLayout {
                         return p1.creationDate.compare(p2.creationDate) == .orderedDescending
                     })
                     self.collectionView?.reloadData()
-                    
                 })
-                
-           })
+            })
         }
     }
+    
+    //TODO: - handle methods
     
     fileprivate func fetchAllPosts() {
         fetchUser()
         fetchFollowingPosts()
     }
+    
     fileprivate func setupNavigation() {
         let logoImage = UIImageView(image: #imageLiteral(resourceName: "Instagram_logo_white"))
         logoImage.tintColor = UIColor.black
         navigationItem.titleView = logoImage
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "camera3"), style: .plain, target: self, action: #selector(handleCamera))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "gear").withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleLogOut))
+
     }
     
+    func createAlert(title:String, message: String)  {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
+        let action = UIAlertAction(title: "Cancel", style: .default, handler: nil)
+        let logOut = UIAlertAction(title: "Sign Out", style: .destructive) { (signOut) in
+            do{
+                try Auth.auth().signOut()
+                
+                DispatchQueue.main.async {
+                    let login = LoginVC()
+                    let nav = UINavigationController(rootViewController: login)
+                    self.present(nav, animated: true, completion: nil)
+                }
+            }catch let err {
+                print(err.localizedDescription)
+            }
+        }
+        
+        alert.addAction(action)
+        alert.addAction(logOut)
+        present(alert, animated: true, completion: nil)
+        
+    }
+    
+    //TODO: -handle methods
+    
+    @objc func handleLogOut()  {
+        
+        createAlert(title: "Sign Out", message: "Are you sure do you want to sign out?")
+    }
     @objc func handleRefreshControl()  {
         posts.removeAll()
         fetchAllPosts()
@@ -156,6 +181,8 @@ class HomeVC: UICollectionViewController, UICollectionViewDelegateFlowLayout {
         present(camera, animated: true, completion: nil)
     }
 }
+
+//MARK: - extensions
 
 extension HomeVC:HomeCellProtocol {
     func didLike(for cell: HomeCell) {
@@ -172,7 +199,6 @@ extension HomeVC:HomeCellProtocol {
                 post.hasLiked = !post.hasLiked
                 self.posts[index.item] = post
                 self.collectionView.reloadItems(at: [index])
-                
             }
         }
     }
@@ -181,7 +207,6 @@ extension HomeVC:HomeCellProtocol {
         let comment = CommentVC(collectionViewLayout: UICollectionViewFlowLayout())
         comment.posts = post
         navigationController?.pushViewController(comment, animated: true)
-        
     }
     
     

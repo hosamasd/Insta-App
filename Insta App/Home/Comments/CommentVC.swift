@@ -37,6 +37,8 @@ class CommentVC: UICollectionViewController, UICollectionViewDelegateFlowLayout 
         fetchComments()
     }
     
+    //MARK: - override methods
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tabBarController?.tabBar.isHidden = true
@@ -55,9 +57,14 @@ class CommentVC: UICollectionViewController, UICollectionViewDelegateFlowLayout 
     override var canBecomeFirstResponder: Bool{
         return true
     }
+    
+    //MARK: -  collectionView data source
+    
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return commentArray.count
     }
+    
+    
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! CommentCell
@@ -66,6 +73,8 @@ class CommentVC: UICollectionViewController, UICollectionViewDelegateFlowLayout 
         cell.comments = comment
         return cell
     }
+    
+    //MARK: -  collectionViewLayoutdelgate
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 50)
@@ -80,6 +89,8 @@ class CommentVC: UICollectionViewController, UICollectionViewDelegateFlowLayout 
         return .init(width: view.frame.width, height: height)
     }
     
+    //MARK: -  user methods
+    
     fileprivate func setupCollectionView() {
         collectionView.backgroundColor = .white
         collectionView?.alwaysBounceVertical = true
@@ -90,7 +101,6 @@ class CommentVC: UICollectionViewController, UICollectionViewDelegateFlowLayout 
     }
     
     func fetchComments()  {
-        guard let post = posts?.id else { return  }
         guard let uid = Auth.auth().currentUser?.uid else { return  }
         Database.database().reference(withPath: "Comments").child(uid).observe(.childAdded) { (snapshot) in
             guard let dict = snapshot.value as?[String:Any] else {return}
@@ -103,10 +113,11 @@ class CommentVC: UICollectionViewController, UICollectionViewDelegateFlowLayout 
                     self.collectionView.reloadData()
                 }
             })
-            
         }
     }
 }
+
+//MARK: - extensions
 
 extension CommentVC: CommentViewDelgate {
     
@@ -123,6 +134,4 @@ extension CommentVC: CommentViewDelgate {
         }
         
     }
-    
-    
 }

@@ -111,14 +111,15 @@ class HomeCell: UICollectionViewCell {
     func setupViews(){
         let stacks = getStacks(view: likeButton,commentButton,sendMessageButton)
         
+        addViews(profileImage,userNameLabel,optionsButton,mainImage,stacks,bookmarkButton,captionLabel)
         
-         addSubview(profileImage)
-        addSubview(userNameLabel)
-        addSubview(optionsButton)
-        addSubview(mainImage)
-        addSubview(stacks)
-        addSubview(bookmarkButton)
-        addSubview(captionLabel)
+//         addSubview(profileImage)
+//        addSubview(userNameLabel)
+//        addSubview(optionsButton)
+//        addSubview(mainImage)
+//        addSubview(stacks)
+//        addSubview(bookmarkButton)
+//        addSubview(captionLabel)
         
         profileImage.anchor(top: topAnchor, leading: leadingAnchor, bottom: nil, trailing: nil,padding: .init(top: 8, left: 8, bottom: 0, right: 0),size: .init(width: 40, height: 40))
         userNameLabel.anchor(top: topAnchor, leading: profileImage.trailingAnchor, bottom: nil, trailing: nil,padding: .init(top: 8, left: 8, bottom: 0, right: 0),size: .init(width: 0, height: 40))
@@ -132,6 +133,12 @@ class HomeCell: UICollectionViewCell {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    //MARK: - user methods
+    
+    func addViews(_ views: UIView...)  {
+        views.forEach({addSubview($0)})
     }
     
     func getStacks(view: UIView...) -> UIStackView {
