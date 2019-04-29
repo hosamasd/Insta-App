@@ -15,7 +15,7 @@ class UserProfileVC: UICollectionViewController, UICollectionViewDelegateFlowLay
     fileprivate let homeCellId = "homeCellId"
     fileprivate let headerId = "headerId"
     var isGridView:Bool = true
-    
+    var isFinishPagination:Bool = false
     var userUids:String?
     
     var user: UserModel?
@@ -33,16 +33,19 @@ class UserProfileVC: UICollectionViewController, UICollectionViewDelegateFlowLay
         super.viewWillAppear(animated)
         fetchUser()
         
-      // fetchPosts()
-      //  fetchOrderdPostes()
+        // fetchPosts()
+        //  fetchOrderdPostes()
     }
-     //MARK: -collectionView data source
+    //MARK: -collectionView data source
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return posts.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if indexPath.item == self.posts.count - 1 && !isFinishPagination{
+            paginatePosts()
+        }
         if isGridView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! UserProfileCell
             let post = posts[indexPath.item]
@@ -53,11 +56,11 @@ class UserProfileVC: UICollectionViewController, UICollectionViewDelegateFlowLay
             
         }else {
             let homeCell = collectionView.dequeueReusableCell(withReuseIdentifier: homeCellId, for: indexPath) as! HomeCell
-           homeCell.posts = posts[indexPath.item]
+            homeCell.posts = posts[indexPath.item]
             return homeCell
             
         }
-     }
+    }
     
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
@@ -94,10 +97,10 @@ class UserProfileVC: UICollectionViewController, UICollectionViewDelegateFlowLay
             height += 90 // for caption posts
             return .init(width: view.frame.width, height: height)
         }
-      
+        
     }
     
-   
+    
     //MARK: -user methods
     
     fileprivate func setupCollectionView() {
@@ -109,12 +112,12 @@ class UserProfileVC: UICollectionViewController, UICollectionViewDelegateFlowLay
     }
     
     func fetchUser()  {
-         let uids = userUids ??  (Auth.auth().currentUser?.uid ?? "")
+        let uids = userUids ??  (Auth.auth().currentUser?.uid ?? "")
         
         Database.database().loadUserInfo(uid: uids) { (user) in
             self.user = user
             self.navigationItem.title =  user.username
-//            self.fetchOrderdPostes()
+            //            self.fetchOrderdPostes()
             self.paginatePosts()
         }
         
@@ -122,52 +125,51 @@ class UserProfileVC: UICollectionViewController, UICollectionViewDelegateFlowLay
     }
     
     func paginatePosts()  {
-        
+        self.posts.removeAll()
         guard let uids = self.user?.uid else {return}
-       let ref =  Database.database().reference(withPath: "Posts").child(uids)
-        let value = "-LdK167IUMkXpJyNFkNw"
+        let ref =  Database.database().reference(withPath: "Posts").child(uids)
         
-//        let query = ref.queryOrderedByKey().queryStarting(atValue: value).queryLimited(toFirst: 6)
-        let query = ref.queryOrderedByKey().queryLimited(toFirst: 6)
-        query.observeSingleEvent(of: .value) { (snapshot) in
-            let allOjects = snapshot.children.allObjects as?[DataSnapshot]
-             guard let user = self.user  else {return}
-            allOjects?.forEach({ (snap) in
-               
+        //        let query = ref.queryOrderedByKey().queryStarting(atValue: value).queryLimited(toFirst: 6)
+        var query = ref.queryOrdered(byChild: "creationDate")
+        if self.posts.count > 0 {
+            let val = self.posts.last?.creationDate.timeIntervalSince1970
+            query.queryStarting(atValue: val)
+        }
+        query.queryLimited(toLast: 4).observeSingleEvent(of: .value) { (snapshot) in
+            guard var  allOjects = snapshot.children.allObjects as?[DataSnapshot] else {return}
+            
+            allOjects.reverse()
+            if allOjects.count < 4 {
+                self.isFinishPagination = true
+            }
+            
+            if self.posts.count > 0 && allOjects.count > 0{
+                self.posts.removeFirst()
+            }
+            
+            guard let user = self.user  else {return}
+            allOjects.forEach({ (snap) in
+                
                 
                 guard let dict = snap.value as?[String:Any] else {return}
                 
-                let post = PostModel(user: user, dict: dict)
-                                self.posts.append(post)
+                var post = PostModel(user: user, dict: dict)
+                post.id = snap.key
+                self.posts.append(post)
             })
-         self.collectionView.reloadData()
+            
+            self.collectionView.reloadData()
         }
     }
-//    func fetchPosts()  {
-//        guard  let uids = Auth.auth().currentUser?.uid  else {return}
-//        Database.database().reference(withPath: "Posts").child(uids).observeSingleEvent(of: .value) { (sanpshot) in
-//            guard let dictionaries = sanpshot.value as?[String:Any] else {return}
-//
-//            dictionaries.forEach({ (key,value) in
-//
-//                guard let dict = value as?[String:Any] else {return}
-//                 guard let user = self.user  else {return}
-//                let post = PostModel(user: user, dict: dict)
-//                self.posts.append(post)
-//            })
-//
-//            self.collectionView.reloadData()
-//        }
-//
-//    }
+    
     
     func fetchOrderdPostes()  {
         posts.removeAll()
         guard let uids = self.user?.uid else {return}
         Database.database().reference(withPath: "Posts").child(uids).queryOrdered(byChild: "creationDate").observe(.childAdded) { (snapshot) in
-           
+            
             guard let dict  = snapshot.value as? [String:Any] else {return}
-             guard let user = self.user else {return}
+            guard let user = self.user else {return}
             let post = PostModel(user: user, dict: dict)
             self.posts.insert(post, at: 0)
             
@@ -176,27 +178,26 @@ class UserProfileVC: UICollectionViewController, UICollectionViewDelegateFlowLay
     }
     //TODO: -handle methods
     
-   @objc func handleLogOut()  {
-    let alert = UIAlertController(title: "sign out?", message: "Are you sure do you want to sign out?", preferredStyle: .actionSheet)
-    let cancel = UIAlertAction(title: "Cancel", style: .default, handler: nil)
-    let ok  = UIAlertAction(title: "Sign out", style: .destructive) { (tex) in
-        do{
-            try Auth.auth().signOut()
-            
-            DispatchQueue.main.async {
-                let login = LoginVC()
-                let nav = UINavigationController(rootViewController: login)
-                self.present(nav, animated: true, completion: nil)
+    @objc func handleLogOut()  {
+        let alert = UIAlertController(title: "sign out?", message: "Are you sure do you want to sign out?", preferredStyle: .actionSheet)
+        let cancel = UIAlertAction(title: "Cancel", style: .default, handler: nil)
+        let ok  = UIAlertAction(title: "Sign out", style: .destructive) { (tex) in
+            do{
+                try Auth.auth().signOut()
+                
+                DispatchQueue.main.async {
+                    let login = LoginVC()
+                    let nav = UINavigationController(rootViewController: login)
+                    self.present(nav, animated: true, completion: nil)
+                }
+            }catch let err {
+                print(err.localizedDescription)
             }
-            print("sign out process")
-        }catch let err {
-            print(err.localizedDescription)
+            
         }
-        
-    }
-    alert.addAction(ok)
-    alert.addAction(cancel)
-    present(alert, animated: true, completion: nil)
+        alert.addAction(ok)
+        alert.addAction(cancel)
+        present(alert, animated: true, completion: nil)
     }
     
     
