@@ -24,10 +24,17 @@ class HomeCell: UICollectionViewCell {
             self.profileImage.loadImageUsingCacheWithUrlString(post.user.imageUrl)
             let selected = post.hasLiked ? #imageLiteral(resourceName: "like_selected").withRenderingMode(.alwaysOriginal) : #imageLiteral(resourceName: "like_unselected").withRenderingMode(.alwaysOriginal)
             self.likeButton.setImage(selected, for: .normal)
+            
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat =  "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
+            let stringDate =   post.creationDate.getElapsedInterval(dates: post.creationDate)
+            
             let attributeText = NSMutableAttributedString(string: "\(post.user.username): ", attributes:  [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 14)])
             attributeText.append(NSAttributedString(string: "\(post.caption)", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14)]))
             attributeText.append(NSAttributedString(string: "\n", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 4)]))
-            attributeText.append(NSAttributedString(string: "1 week ago", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14),.foregroundColor: UIColor.lightGray]))
+            attributeText.append(NSAttributedString(string: stringDate, attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14),.foregroundColor: UIColor.lightGray]))
+            
+            
             
             self.captionLabel.attributedText = attributeText
         }

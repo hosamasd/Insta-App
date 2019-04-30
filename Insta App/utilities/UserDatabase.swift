@@ -37,3 +37,26 @@ extension Database {
 
     
 }
+
+extension Date {
+    func getElapsedInterval(dates:Date) -> String {
+        
+     let interval = Calendar.current.dateComponents([ .hour, .minute, .second], from: dates, to: Date())
+        
+        if let hour = interval.hour, hour > 0 {
+    return hour == 1 ? "\(hour)" + " " + "hour ago" :
+    "\(hour)" + " " + "hours ago"
+        }else if let mintue = interval.minute, mintue > 0 {
+            return mintue == 1 ? "\(mintue)" + " " + "hour ago" :
+                "\(mintue)" + " " + "mintues ago"
+        }else if let second = interval.second, second > 0 {
+            return second == 1 ? "\(second)" + " " + "second ago" :
+                "\(second)" + " " + "seconds ago"
+        } else {
+            return "a moment ago"
+            
+        }
+        
+    }
+
+}
