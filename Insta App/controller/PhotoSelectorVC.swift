@@ -20,53 +20,21 @@ class PhotoSelectorVC: UICollectionViewController, UICollectionViewDelegateFlowL
     var assets = [PHAsset]()
     var sharedImage: UIImage?
     
+  
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancel))
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Next", style: .plain, target: self, action: #selector(handleNext))
+        setupNavigation()
 
-        collectionView.backgroundColor = .white
-        collectionView.register(PhotoSelectorCell.self, forCellWithReuseIdentifier: cellId)
-        collectionView.register(PhotoSelectorHeaderCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
+        setupCollectionView()
 
         fetchPhotos()
     }
     
-    fileprivate func assetsFetchOption() ->PHFetchOptions {
-        let fetchOptions = PHFetchOptions()
-        fetchOptions.fetchLimit = 30
-        let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
-        fetchOptions.sortDescriptors = [sortDescriptor]
-        return fetchOptions
-    }
     
-    fileprivate func fetchPhotos(){
-       let allPhotos = PHAsset.fetchAssets(with: assetsFetchOption())
-        DispatchQueue.global(qos: .background).async {
-            
-            allPhotos.enumerateObjects { (asset, count, stop) in
-                print(count)
-                let imageManager = PHImageManager.default()
-                let size = CGSize(width: 200, height: 200)
-                let options = PHImageRequestOptions()
-                options.isSynchronous = true
-                imageManager.requestImage(for: asset, targetSize: size, contentMode: .aspectFit, options: options, resultHandler: { (images, info) in
-                    guard let image = images else{return}
-                    self.imageStorageArray.append(image)
-                    self.assets.append(asset)
-                    if self.selectedImage == nil {
-                        self.selectedImage = image
-                    }
-                    if count == allPhotos.count - 1 {
-                        DispatchQueue.main.async {
-                            self.collectionView.reloadData()
-                        }
-                    }
-                })
-            }
-        }
-     }
+    
+    
     
     
     override var prefersStatusBarHidden: Bool{
@@ -118,10 +86,10 @@ class PhotoSelectorVC: UICollectionViewController, UICollectionViewDelegateFlowL
        collectionView.scrollToItem(at: index, at: .bottom, animated: true)
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        
-        return CGSize(width: view.frame.width, height: 250)
-    }
+    
+    
+    
+    //MARK: -collectionViewLayoutdelgate
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 1
@@ -129,6 +97,13 @@ class PhotoSelectorVC: UICollectionViewController, UICollectionViewDelegateFlowL
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 1
+    }
+    
+    
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        
+        return CGSize(width: view.frame.width, height: 250)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -139,6 +114,51 @@ class PhotoSelectorVC: UICollectionViewController, UICollectionViewDelegateFlowL
     
     //MARK: -user methods
     
+    func setupCollectionView()  {
+        collectionView.backgroundColor = .white
+        collectionView.register(PhotoSelectorCell.self, forCellWithReuseIdentifier: cellId)
+        collectionView.register(PhotoSelectorHeaderCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
+    }
+    
+    fileprivate func setupNavigation() {
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancel))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Next", style: .plain, target: self, action: #selector(handleNext))
+    }
+    
+    fileprivate func fetchPhotos(){
+        let allPhotos = PHAsset.fetchAssets(with: assetsFetchOption())
+        DispatchQueue.global(qos: .background).async {
+            
+            allPhotos.enumerateObjects { (asset, count, stop) in
+                print(count)
+                let imageManager = PHImageManager.default()
+                let size = CGSize(width: 200, height: 200)
+                let options = PHImageRequestOptions()
+                options.isSynchronous = true
+                imageManager.requestImage(for: asset, targetSize: size, contentMode: .aspectFit, options: options, resultHandler: { (images, info) in
+                    guard let image = images else{return}
+                    self.imageStorageArray.append(image)
+                    self.assets.append(asset)
+                    if self.selectedImage == nil {
+                        self.selectedImage = image
+                    }
+                    if count == allPhotos.count - 1 {
+                        DispatchQueue.main.async {
+                            self.collectionView.reloadData()
+                        }
+                    }
+                })
+            }
+        }
+    }
+    
+    fileprivate func assetsFetchOption() ->PHFetchOptions {
+        let fetchOptions = PHFetchOptions()
+        fetchOptions.fetchLimit = 30
+        let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
+        fetchOptions.sortDescriptors = [sortDescriptor]
+        return fetchOptions
+    }
     
     //TODO: -handle methods
     

@@ -11,9 +11,6 @@ import FirebaseAuth
 
 class MainTabBarVC: UITabBarController {
     
-   
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         //check if login or not

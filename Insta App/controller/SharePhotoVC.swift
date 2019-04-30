@@ -13,24 +13,24 @@ import Firebase
 class SharePhotoVC: UIViewController {
     
     static let updateFeedNotificationName = NSNotification.Name("updateFeed")
-
+    
     
     var selectedImage:UIImage? {
         didSet{
-        self.shareImage.image = selectedImage
-    }
+            self.shareImage.image = selectedImage
+        }
     }
     
     
     let shareImage:UIImageView = {
         let im = UIImageView()
-      im.contentMode = .scaleAspectFit
+        im.contentMode = .scaleAspectFit
         im.clipsToBounds = true
         
         return im
     }()
     let shareText:UITextView = {
-       let tx = UITextView()
+        let tx = UITextView()
         
         tx.sizeToFit()
         
@@ -57,6 +57,8 @@ class SharePhotoVC: UIViewController {
         return true
     }
     
+    //MARK: -user methods
+    
     func setupViews()  {
         view.addSubview(mainView)
         
@@ -65,33 +67,10 @@ class SharePhotoVC: UIViewController {
         mainView.addSubview(shareImage)
         mainView.addSubview(shareText)
         shareImage.anchor(top: mainView.topAnchor, leading: mainView.leadingAnchor, bottom: mainView.bottomAnchor, trailing: nil,padding: .init(top: 8, left: 8, bottom: 8, right: 0),size: .init(width: 100, height: 0))
-           shareText.anchor(top: mainView.topAnchor, leading: shareImage.trailingAnchor, bottom: mainView.bottomAnchor, trailing: mainView.trailingAnchor,padding: .init(top: 8, left: 8, bottom: 8, right: 8),size: .init(width: 0, height: 0))
+        shareText.anchor(top: mainView.topAnchor, leading: shareImage.trailingAnchor, bottom: mainView.bottomAnchor, trailing: mainView.trailingAnchor,padding: .init(top: 8, left: 8, bottom: 8, right: 8),size: .init(width: 0, height: 0))
     }
-   @objc func handleShare()  {
-    uploadMedia { (urls) in
-        guard let caption   = self.shareText.text, caption.count > 0 else {return}
-        guard let url   = urls else {return}
-        guard let img   = self.shareImage.image else {return}
-        guard let uids = Auth.auth().currentUser?.uid else {return}
-        
-        self.navigationItem.rightBarButtonItem?.isEnabled = false
-        
-        let values:[String : Any] = ["image-url":url,"caption": caption, "imageWidth": img.size.width, "imageHeight": img.size.height,"creationDate": Date().timeIntervalSince1970]
-        
-        Database.database().reference(withPath: "Posts").child(uids).childByAutoId().updateChildValues(values, withCompletionBlock: { (err, ref) in
-            if err == nil {
-                print("successed")
-                
-            }else {
-                print(err?.localizedDescription)
-                self.navigationItem.rightBarButtonItem?.isEnabled = true
-            }
-            //make notification to listen the operation of dismiss
-            NotificationCenter.default.post(name: SharePhotoVC.updateFeedNotificationName, object: nil)
-            self.dismiss(animated: true, completion: nil)
-        })
-    }
-    }
+    
+    
     
     func uploadMedia(completion: @escaping (_ url: String?) -> Void) {
         let imageName = NSUUID().uuidString
@@ -114,6 +93,33 @@ class SharePhotoVC: UIViewController {
                     )
                 }
             }
+        }
+    }
+    
+    //TODO: -handle methods
+    
+    @objc func handleShare()  {
+        uploadMedia { (urls) in
+            guard let caption   = self.shareText.text, caption.count > 0 else {return}
+            guard let url   = urls else {return}
+            guard let img   = self.shareImage.image else {return}
+            guard let uids = Auth.auth().currentUser?.uid else {return}
+            
+            self.navigationItem.rightBarButtonItem?.isEnabled = false
+            
+            let values:[String : Any] = ["image-url":url,"caption": caption, "imageWidth": img.size.width, "imageHeight": img.size.height,"creationDate": Date().timeIntervalSince1970]
+            
+            Database.database().reference(withPath: "Posts").child(uids).childByAutoId().updateChildValues(values, withCompletionBlock: { (err, ref) in
+                if err == nil {
+                    print("successed")
+                    
+                }else {
+                    self.navigationItem.rightBarButtonItem?.isEnabled = true
+                }
+                //make notification to listen the operation of dismiss
+                NotificationCenter.default.post(name: SharePhotoVC.updateFeedNotificationName, object: nil)
+                self.dismiss(animated: true, completion: nil)
+            })
         }
     }
 }

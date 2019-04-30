@@ -17,6 +17,9 @@ class UserProfileVC: UICollectionViewController, UICollectionViewDelegateFlowLay
     var isGridView:Bool = true
     var isFinishPagination:Bool = false
     var userUids:String?
+    var numberOfPosts:Int = 0
+    var numberOfFollowing:Int = 0
+    
     
     var user: UserModel?
     var posts: [PostModel] = []
@@ -26,9 +29,18 @@ class UserProfileVC: UICollectionViewController, UICollectionViewDelegateFlowLay
         super.viewDidLoad()
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "gear").withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleLogOut))
         setupCollectionView()
-        
+        numberOFpOSTS()
     }
     
+    func numberOFpOSTS()  {
+        guard let uids = Auth.auth().currentUser?.uid else { return  }
+        Database.database().reference(withPath: "Posts").child(uids).observe(.childAdded) { (snapshot) in
+            self.numberOfPosts = snapshot.children.allObjects.count
+        }
+        Database.database().reference(withPath: "Following").child(uids).observe(.value) { (snapshot) in
+            self.numberOfFollowing = snapshot.children.allObjects.count
+        }
+    }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         fetchUser()
@@ -43,9 +55,9 @@ class UserProfileVC: UICollectionViewController, UICollectionViewDelegateFlowLay
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if indexPath.item == self.posts.count - 1 && !isFinishPagination{
-            paginatePosts()
-        }
+//        if indexPath.item == self.posts.count - 1 && !isFinishPagination{
+//            paginatePosts()
+//        }
         if isGridView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! UserProfileCell
             let post = posts[indexPath.item]
@@ -76,6 +88,15 @@ class UserProfileVC: UICollectionViewController, UICollectionViewDelegateFlowLay
             headerId, for: indexPath) as! UserProfileHeaderCell
         header.delgate = self
         header.users = user
+        
+        let attributeText = NSMutableAttributedString(string: "\(numberOfPosts)\n", attributes:  [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 14)])
+        attributeText.append(NSAttributedString(string: "post", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14),.foregroundColor: UIColor.lightGray]))
+         header.postLabel.attributedText = attributeText
+        
+        let attributeText2 = NSMutableAttributedString(string: "\(numberOfFollowing)\n", attributes:  [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 14)])
+        attributeText2.append(NSAttributedString(string: "followering", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14),.foregroundColor: UIColor.lightGray]))
+        header.followeringLabel.attributedText = attributeText2
+        
         return header
     }
     
@@ -118,45 +139,53 @@ class UserProfileVC: UICollectionViewController, UICollectionViewDelegateFlowLay
             self.user = user
             self.navigationItem.title =  user.username
             //            self.fetchOrderdPostes()
-            self.paginatePosts()
+//            self.paginatePosts()
+        self.fetchOrderdPostes()
         }
         
         
     }
     
-    func paginatePosts()  {
-        self.posts.removeAll()
-        guard let uids = self.user?.uid else {return}
-        let ref =  Database.database().reference(withPath: "Posts").child(uids)
-        
-        //        let query = ref.queryOrderedByKey().queryStarting(atValue: value).queryLimited(toFirst: 6)
-        var query = ref.queryOrderedByKey()
-       query.queryLimited(toLast: 4).observeSingleEvent(of: .value) { (snapshot) in
-            guard var  allOjects = snapshot.children.allObjects as?[DataSnapshot] else {return}
-            
-            allOjects.reverse()
-            if allOjects.count < 4 {
-                self.isFinishPagination = true
-            }
-            
-            if self.posts.count > 0 && allOjects.count > 0{
-                self.posts.removeFirst()
-            }
-            
-            guard let user = self.user  else {return}
-            allOjects.forEach({ (snap) in
-                
-                
-                guard let dict = snap.value as?[String:Any] else {return}
-                
-                var post = PostModel(user: user, dict: dict)
-                post.id = snap.key
-                self.posts.append(post)
-            })
-            
-            self.collectionView.reloadData()
-        }
-    }
+//    func fetchOrederdPosts()  {
+//        guard let uids = self.user?.uid else {return}
+//        let ref =  Database.database().reference(withPath: "Posts").child(uids)
+//        ref.queryOrdered(byChild: "creationDate").observe(.childAdded) { (snapshot) in
+//            print(snapshot)
+//        }
+//    }
+//    func paginatePosts()  {
+//        self.posts.removeAll()
+//        guard let uids = self.user?.uid else {return}
+//        let ref =  Database.database().reference(withPath: "Posts").child(uids)
+//
+//        //        let query = ref.queryOrderedByKey().queryStarting(atValue: value).queryLimited(toFirst: 6)
+//        var query = ref.queryOrderedByKey()
+//       query.queryLimited(toLast: 4).observeSingleEvent(of: .value) { (snapshot) in
+//            guard var  allOjects = snapshot.children.allObjects as?[DataSnapshot] else {return}
+//
+//            allOjects.reverse()
+//            if allOjects.count < 4 {
+//                self.isFinishPagination = true
+//            }
+//
+//            if self.posts.count > 0 && allOjects.count > 0{
+//                self.posts.removeFirst()
+//            }
+//
+//            guard let user = self.user  else {return}
+//            allOjects.forEach({ (snap) in
+//
+//
+//                guard let dict = snap.value as?[String:Any] else {return}
+//
+//                var post = PostModel(user: user, dict: dict)
+//                post.id = snap.key
+//                self.posts.append(post)
+//            })
+//
+//            self.collectionView.reloadData()
+//        }
+//    }
     
     
     func fetchOrderdPostes()  {

@@ -10,6 +10,7 @@ import UIKit
 import Firebase
 import FirebaseDatabase
 
+
 class RegisterVC: UIViewController {
     
     lazy var plusPhotoButton:UIImageView = {
@@ -24,8 +25,7 @@ class RegisterVC: UIViewController {
     let emailTextField:UITextField = {
         let tf = UITextField()
         tf.placeholder = "Email"
-        tf.text = "h@h.com"
-        tf.font = UIFont.systemFont(ofSize: 14)
+       tf.font = UIFont.systemFont(ofSize: 14)
         tf.backgroundColor = UIColor(white: 0, alpha: 0.03)
         tf.borderStyle = .roundedRect
         tf.addTarget(self, action: #selector(handleTextChange), for: .editingChanged)
@@ -34,8 +34,7 @@ class RegisterVC: UIViewController {
     let userNameTextField:UITextField = {
         let tf = UITextField()
         tf.placeholder = "User Name"
-        tf.text = "hosam"
-        tf.font = UIFont.systemFont(ofSize: 14)
+       tf.font = UIFont.systemFont(ofSize: 14)
         tf.backgroundColor = UIColor(white: 0, alpha: 0.03)
         tf.borderStyle = .roundedRect
         tf.addTarget(self, action: #selector(handleTextChange), for: .editingChanged)
@@ -44,7 +43,6 @@ class RegisterVC: UIViewController {
     let passwordTextField:UITextField = {
         let tf = UITextField()
         tf.placeholder = "Password"
-        tf.text = "123456"
         tf.isSecureTextEntry = true
         tf.font = UIFont.systemFont(ofSize: 14)
         tf.backgroundColor = UIColor(white: 0, alpha: 0.03)

@@ -19,6 +19,7 @@ class UserProfileHeaderCell: BaseCell {
     
     var delgate:UserProfileHeaderCellProtocol?
     
+     
     let profileImage:UIImageView = {
        let im = UIImageView()
         im.layer.cornerRadius = 80/2
@@ -125,13 +126,9 @@ class UserProfileHeaderCell: BaseCell {
         let stackLabels = getStacks(view: postLabel,followersLabel,followeringLabel)
         
         
-        addSubview(profileImage)
-        addSubview(userNameLabel)
-        addSubview(stackLabels)
-        addSubview(editProfileFollowButton)
-        addSubview(topView)
-        addSubview(stackButtons)
-        addSubview(bottomView)
+        
+        addViews(profileImage,userNameLabel,stackLabels,editProfileFollowButton,topView,stackButtons,bottomView)
+        
         profileImage.anchor(top: topAnchor, leading: leadingAnchor, bottom: nil, trailing: nil,padding: .init(top: 12, left: 12, bottom: 0, right: 0),size: .init(width: 80, height: 80))
         userNameLabel.anchor(top: profileImage.bottomAnchor, leading: profileImage.leadingAnchor, bottom: nil, trailing: profileImage.trailingAnchor,padding: .init(top: 12, left: 0, bottom: 0, right: 0),size: .init(width: 0, height: 0))
          stackLabels.anchor(top: topAnchor, leading: profileImage.trailingAnchor, bottom: nil, trailing: trailingAnchor,padding: .init(top: 12, left: 12, bottom: 0, right: 12),size: .init(width: 0, height: 40))
@@ -141,6 +138,9 @@ class UserProfileHeaderCell: BaseCell {
          bottomView.anchor(top: stackButtons.bottomAnchor, leading: leadingAnchor, bottom: bottomAnchor, trailing: trailingAnchor,padding: .init(top: 18, left: 0, bottom: 0, right: 0),size: .init(width: 0, height: 0))
     }
   
+    func addViews(_ views: UIView...)  {
+        views.forEach({addSubview($0)})
+    }
    
     
     func getStacks(view: UIView...) -> UIStackView {
@@ -195,7 +195,7 @@ class UserProfileHeaderCell: BaseCell {
                 }
                 self.setupFollowStyle()
             }
-        }else   {
+        }else if  sender.titleLabel?.text == "Follow" {
     let values = [targetUserUid:1]
     Database.database().reference(withPath: "Following").child(currentUserUid).updateChildValues(values) { (err, ref) in
         if err == nil {
