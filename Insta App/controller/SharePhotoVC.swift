@@ -8,7 +8,8 @@
 
 import UIKit
 import FirebaseStorage
-import Firebase
+import FirebaseAuth
+import FirebaseDatabase
 
 class SharePhotoVC: UIViewController {
     
