@@ -2,6 +2,9 @@
 This app is done programmtically no storyboard used.
 simple app that same as possible instagram that can share photos with friends and follow them and comment to any photos and save data in the firebase,Enjoy!
 
+demo video
+![Alt Text](https://j.gifs.com/0Y33lX.gif)
+
 ![login](https://user-images.githubusercontent.com/34996617/57174737-9ac55a80-6e43-11e9-9c26-34b134326e02.png)
 ![signup](https://user-images.githubusercontent.com/34996617/57174739-9dc04b00-6e43-11e9-93f1-d8997501507c.png)
 ![main](https://user-images.githubusercontent.com/34996617/57174742-a4e75900-6e43-11e9-8bed-3cca63560c52.png)
