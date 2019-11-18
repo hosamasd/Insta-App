@@ -5,7 +5,7 @@ simple app that same as possible instagram that can share photos with friends an
 # short demo video.
 
 
-![Alt Text](https://j.gifs.com/0Y33lX.gif)
+![Alt Text](https://j.gifs.com/D1Egg6.gif)
 
 ![login](https://user-images.githubusercontent.com/34996617/57174737-9ac55a80-6e43-11e9-9c26-34b134326e02.png)
 ![signup](https://user-images.githubusercontent.com/34996617/57174739-9dc04b00-6e43-11e9-93f1-d8997501507c.png)
